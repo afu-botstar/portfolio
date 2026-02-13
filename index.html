@@ -439,6 +439,13 @@
     #projects, #ai, #article {
       padding-top: var(--tab-to-content);
     }
+    /* Art 顶部偏少，单独补足以与 Design/Tool 一致 */
+    #projects {
+      padding-top: calc(var(--tab-to-content) + 1rem);
+    }
+    #projects .projects-list-wrap {
+      height: calc(100vh - var(--tab-to-content) - 1rem);
+    }
 
     section .section-inner {
       max-width: 1280px;
@@ -574,7 +581,8 @@
       padding-top: 80px;
     }
 
-    .article-list-wrap.article-list-view {
+    .article-list-wrap.article-list-view,
+    .projects-list-wrap {
       width: 100%;
       height: calc(100vh - var(--tab-to-content));
       overflow-y: auto;
@@ -583,6 +591,7 @@
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
+    .projects-list-wrap::-webkit-scrollbar { display: none; }
     #ai-list-wrap.article-list-view {
       display: flex;
       flex-direction: column;
@@ -1284,7 +1293,7 @@
         height: 100%;
         min-height: 100%;
         scroll-snap-align: start;
-        scroll-snap-stop: always;
+        scroll-snap-stop: normal;
         overflow-y: auto;
         overflow-x: hidden;
         box-sizing: border-box;
@@ -1300,24 +1309,43 @@
       body.swipe-mode #about {
         display: flex !important;
       }
-      /* 移动端 Design/Tool 列表页与 swipe 同风格，避免切换时底色和宽度跳闪 */
-      /* 缩小 tab 下方留白(4rem)，避免 tab 与内容间大面积空白遮挡列表 */
+      /* 移动端 Art/Design/Tool 三页：section 零 padding，仅靠 ::before 控制顶部，三者完全一致 */
+      body.swipe-mode #projects,
       body.swipe-mode #ai,
       body.swipe-mode #article {
-        --tab-to-content: 4rem;
+        --tab-to-content: 4rem !important;
         background: #F2F2F7;
-        padding-top: 4rem;
-        padding-left: 0;
-        padding-right: 0;
-        padding-bottom: 0;
+        padding: 0 !important;
+      }
+      body.swipe-mode #projects::before,
+      body.swipe-mode #ai::before,
+      body.swipe-mode #article::before {
+        content: '';
+        display: block;
+        height: 4rem;
+        flex-shrink: 0;
+      }
+      /* Art 顶部偏少，::before 加大以与 Design/Tool 一致 */
+      body.swipe-mode #projects::before {
+        height: 5rem;
+      }
+      body.swipe-mode #projects .projects-list-wrap {
+        height: calc(100vh - 5rem);
+      }
+      /* section-inner：Design/Tool 无内边距；Art 左右留白放这里，不占 section */
+      body.swipe-mode #projects .section-inner {
+        max-width: none;
+        margin: 0;
+        padding: 0 clamp(1rem, 5vw, 2rem) 0;
       }
       body.swipe-mode #ai .section-inner,
       body.swipe-mode #article .section-inner {
         max-width: none;
+        margin: 0;
         padding: 0;
       }
-      body.swipe-mode #article.article-view-detail {
-        padding-top: 5.5rem;
+      body.swipe-mode #article.article-view-detail::before {
+        height: 5.5rem;
       }
       body.swipe-mode #article.article-view-detail .article-detail-wrap.is-visible {
         padding-left: clamp(1rem, 5vw, 2rem);
@@ -1457,7 +1485,11 @@
   </section>
 
   <section id="projects">
-    <div class="works-gallery" id="works-gallery"></div>
+    <div class="section-inner">
+      <div class="projects-list-wrap">
+        <div class="works-gallery" id="works-gallery"></div>
+      </div>
+    </div>
   </section>
 
   <section id="ai">
@@ -2030,14 +2062,7 @@
         pageWrap.insertBefore(wrapper, lightbox);
         swipeWrapperEl = wrapper;
 
-        var SWIPE_DELTA_THRESHOLD = 50;
-        var SWIPE_DEBOUNCE_MS = 400;
-        var lastSwipeTime = 0;
-        var touchStartX = 0;
-        var touchStartY = 0;
-        var touchStartScroll = 0;
-        var touchStartIndex = 0;
-        var touchIsHorizontal = null;
+        var SWIPE_DEBOUNCE_MS = 300;
 
         function scrollToPage(index) {
           if (!swipeWrapperEl) return;
@@ -2084,61 +2109,22 @@
           swipeUpdatingFromScroll = false;
         }
 
-        function onTouchStart(e) {
-          if (!e.touches || !e.touches.length) return;
-          if (Date.now() - lastSwipeTime < SWIPE_DEBOUNCE_MS) return;
-          var w = wrapper.getBoundingClientRect().width;
-          touchStartX = e.touches[0].clientX;
-          touchStartY = e.touches[0].clientY;
-          touchStartScroll = wrapper.scrollLeft;
-          touchStartIndex = Math.round(touchStartScroll / w);
-          touchStartIndex = Math.max(0, Math.min(touchStartIndex, SWIPE_PAGE_IDS.length - 1));
-          touchIsHorizontal = null;
-        }
-        function onTouchMove(e) {
-          if (!e.touches || !e.touches.length) return;
-          var deltaX = e.touches[0].clientX - touchStartX;
-          var deltaY = e.touches[0].clientY - touchStartY;
-          if (touchIsHorizontal === null) touchIsHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
-          if (!touchIsHorizontal) return;
-          e.preventDefault();
-          var w = wrapper.getBoundingClientRect().width;
-          var targetScroll = touchStartScroll - deltaX;
-          var minScroll = Math.max(0, (touchStartIndex - 1) * w);
-          var maxScroll = Math.min(wrapper.scrollWidth - w, (touchStartIndex + 1) * w);
-          wrapper.scrollLeft = Math.max(minScroll, Math.min(maxScroll, targetScroll));
-        }
-        function onTouchEnd(e) {
-          if (!e.changedTouches || !e.changedTouches.length) return;
-          if (!touchIsHorizontal) return;
-          var endX = e.changedTouches[0].clientX;
-          var deltaX = endX - touchStartX;
-          var w = wrapper.getBoundingClientRect().width;
-          var threshold = Math.min(SWIPE_DELTA_THRESHOLD, w * 0.2);
-          var targetIndex = touchStartIndex;
-          if (deltaX > threshold) targetIndex = touchStartIndex - 1;
-          else if (deltaX < -threshold) targetIndex = touchStartIndex + 1;
-          scrollToPage(targetIndex);
-          lastSwipeTime = Date.now();
-        }
+        /* 使用原生 touch 滚动，由浏览器优化性能，scroll-snap 负责吸附 */
+        wrapper._swipeHandlers = {};
 
-        wrapper._swipeHandlers = { onTouchStart: onTouchStart, onTouchMove: onTouchMove, onTouchEnd: onTouchEnd };
-        wrapper.addEventListener('touchstart', onTouchStart, { passive: true });
-        wrapper.addEventListener('touchmove', onTouchMove, { passive: false });
-        wrapper.addEventListener('touchend', onTouchEnd, { passive: true });
-
+        var lastWheelTime = 0;
         function onWheel(e) {
           if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
           e.preventDefault();
           var w = wrapper.getBoundingClientRect().width;
-          if (Date.now() - lastSwipeTime < SWIPE_DEBOUNCE_MS) return;
+          if (Date.now() - lastWheelTime < SWIPE_DEBOUNCE_MS) return;
           var curIndex = Math.round(wrapper.scrollLeft / w);
           curIndex = Math.max(0, Math.min(curIndex, SWIPE_PAGE_IDS.length - 1));
           var threshold = 10;
           if (e.deltaX > threshold) curIndex = Math.max(0, curIndex - 1);
           else if (e.deltaX < -threshold) curIndex = Math.min(SWIPE_PAGE_IDS.length - 1, curIndex + 1);
           scrollToPage(curIndex);
-          lastSwipeTime = Date.now();
+          lastWheelTime = Date.now();
         }
         wrapper._swipeHandlers.onWheel = onWheel;
         wrapper.addEventListener('wheel', onWheel, { passive: false });
@@ -2171,10 +2157,7 @@
           wrapper.removeEventListener('scroll', swipeScrollListener);
           swipeScrollListener = null;
         }
-        if (wrapper._swipeHandlers) {
-          wrapper.removeEventListener('touchstart', wrapper._swipeHandlers.onTouchStart);
-          wrapper.removeEventListener('touchmove', wrapper._swipeHandlers.onTouchMove);
-          wrapper.removeEventListener('touchend', wrapper._swipeHandlers.onTouchEnd);
+        if (wrapper._swipeHandlers && wrapper._swipeHandlers.onWheel) {
           wrapper.removeEventListener('wheel', wrapper._swipeHandlers.onWheel);
           delete wrapper._swipeHandlers;
         }
