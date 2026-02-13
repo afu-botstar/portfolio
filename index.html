@@ -935,6 +935,7 @@
       .article-item-card {
         flex-direction: column;
         min-height: auto;
+        overflow: visible;
       }
       .article-item-right {
         display: none;
@@ -944,6 +945,12 @@
       }
       .article-item-left {
         width: 100%;
+        min-width: 0;
+      }
+      #article .article-item-title,
+      #article .article-item-excerpt {
+        word-break: normal;
+        overflow-wrap: break-word;
       }
       #article .article-item,
       #ai .article-item {
@@ -954,6 +961,14 @@
       #article .article-item-inner,
       #ai .article-item-inner {
         min-height: 0;
+        overflow: visible;
+      }
+      #article .article-item-content {
+        width: 100%;
+        overflow: visible;
+      }
+      #article .article-item-cta {
+        white-space: nowrap;
       }
       #article .article-list,
       #ai .article-list {
