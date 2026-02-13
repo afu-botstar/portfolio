@@ -5,30 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfolio</title>
   <style>
-    @font-face {
-      font-family: 'Kaisei Decol';
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url('front/KaiseiDecol-Regular.ttf') format('truetype');
-      unicode-range: U+0020-007E;
-    }
-    @font-face {
-      font-family: 'Kaisei Decol';
-      font-style: normal;
-      font-weight: 500;
-      font-display: swap;
-      src: url('front/KaiseiDecol-Medium.ttf') format('truetype');
-      unicode-range: U+0020-007E;
-    }
-    @font-face {
-      font-family: 'Kaisei Decol';
-      font-style: normal;
-      font-weight: 700;
-      font-display: swap;
-      src: url('front/KaiseiDecol-Bold.ttf') format('truetype');
-      unicode-range: U+0020-007E;
-    }
     :root {
       --bg: linear-gradient(180deg, #e8f4fd 0%, #f5f9fc 35%, #fff8f0 70%, #fef5eb 100%);
       --bg-card: rgba(255, 255, 255, 0.85);
@@ -43,9 +19,9 @@
       --radius-lg: 24px;
       --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
       --shadow-hover: 0 12px 28px rgba(249, 115, 22, 0.12);
-      /* 英文用上传的 Kaisei Decol（unicode-range 限定拉丁字符），中文用苹方或系统默认 */
-      --font: 'Kaisei Decol', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
-      --font-mobile: 'Kaisei Decol', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+      /* 不加载任何字体，全部使用系统自带字体 */
+      --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mobile: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       /* 统一 Art / Design / AI 三个模块内容区到 tab 的顶部间距 */
       --tab-to-content: clamp(6rem, 12vw, 9rem);
     }
@@ -834,6 +810,19 @@
       overflow-wrap: break-word;
       overflow: visible;
     }
+    .article-detail-description {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #374151;
+      margin-top: 1rem;
+      margin-bottom: 0;
+    }
+    .article-detail-description p {
+      margin: 0 0 0.75rem 0;
+    }
+    .article-detail-description p:last-child {
+      margin-bottom: 0;
+    }
     .article-detail-image-wrap {
       margin-top: 1.5rem;
       width: 100%;
@@ -1519,6 +1508,7 @@
       <div class="article-detail-wrap" id="article-detail-wrap" aria-hidden="true">
         <a href="#article" class="article-detail-back" id="article-detail-back">← 返回列表</a>
         <h1 class="article-detail-title" id="article-detail-title"></h1>
+        <div class="article-detail-description" id="article-detail-description"></div>
         <div class="article-detail-image-wrap" id="article-detail-image-wrap"></div>
       </div>
     </div>
@@ -1573,7 +1563,9 @@
           category: '品牌 / 策略',
           excerpt: '腾讯 Techo 开发者大会是腾讯云发起的全球技术盛会，聚焦前沿科技与开发者成长。本次项目以“0”为核心符号，融合多元演讲者形象与NFT概念，打造创新视觉表达。',
           date: '2025-01-01',
-          image: 'article/1/img_1.jpg'
+          image: 'article/1/img_1.jpg',
+          detailDescription: 'TECHOPARK CISG 大型会议项目之一，项目设计中，我们围绕以 "O" 为记忆符号，将 "O" 赋予演讲者角色的这个概念，各种类型的演讲者也代表不同类型设计风格，所以在大会的 KV 上我们也会有更多可视化图形。并且在当时引入 NFT 的概念。',
+          detailResponsibility: '负责内容：概念，设计，动画'
         },
         {
           id: '2',
@@ -1582,7 +1574,9 @@
           category: '概念 / 视觉 / 动效',
           excerpt: '腾讯云的官网是用户接触腾讯云产品重要的渠道之一,官网是腾讯云设计内容当中图形视觉和 图形表达要求较高的场景之一。 负责整个官网模型的图形工作:3D风格定调,3D模型,网页图片风格定调,配图。 项目上线之后得到了有来自于设计行业和普通用户很多认可。',
           date: '2025-01-02',
-          image: 'article/2/img_2.jpg'
+          image: 'article/2/img_2.jpg',
+          detailDescription: '腾讯云的官网是用户接触腾讯云产品重要的渠道之一,官网是腾讯云设计内容当中图形视觉和 图形表达要求较高的场景之一。 负责整个官网模型的图形工作:3D风格定调,3D模型,网页图片风格定调,配图。 项目上线之后得到了有来自于设计行业和普通用户很多认可。',
+          detailResponsibility: '负责内容：概念，视觉，UI，动画'
         },
         {
           id: '3',
@@ -1591,7 +1585,9 @@
           category: '概念 / 视觉',
           excerpt: '品牌焕新，是一次重新定义自我的过程。我们希望通过更系统化的表达，呈现腾讯云设计团队在技术语境下的创造能力与专业态度，让设计成为推动创新与连接世界的重要力量。',
           date: '2025-01-03',
-          image: 'article/3/img_3.jpg'
+          image: 'article/3/img_3.jpg',
+          detailDescription: '品牌焕新，是一次重新定义自我的过程。我们希望通过更系统化的表达，呈现腾讯云设计团队在技术语境下的创造能力与专业态度，让设计成为推动创新与连接世界的重要力量。',
+          detailResponsibility: '负责内容：品牌，视觉，'
         },
         {
           id: '4',
@@ -1600,7 +1596,9 @@
           category: '视觉',
           excerpt: '它不是普通的企鹅，也不是严肃的会议工具，它是腾讯会议的灵魂代言人',
           date: '2025-01-15',
-          image: 'article/4/img_4.jpg'
+          image: 'article/4/img_4.jpg',
+          detailDescription: '它不是普通的企鹅，也不是严肃的会议工具，它是腾讯会议的灵魂代言人。在冰冷的屏幕连接背后，它用设计的温度，重塑了数字沟通的边界',
+          detailResponsibility: '负责内容：品牌，视觉'
         },
         {
           id: '5',
@@ -1609,7 +1607,9 @@
           category: '视觉 / UX',
           excerpt: '日常工作内容的记录，大会的官网，节日活动',
           date: '2025-01-20',
-          image: 'article/article_5/img_5.jpg'
+          image: 'article/article_5/img_5.jpg',
+          detailDescription: '日常工作内容的记录，大会的官网，节日活动',
+          detailResponsibility: '负责内容：视觉，UI，动销，供应商落地'
         }
       ];
 
@@ -1716,6 +1716,7 @@
       var aiListWrap = document.getElementById('ai-list-wrap');
       var articleDetailWrap = document.getElementById('article-detail-wrap');
       var articleDetailTitle = document.getElementById('article-detail-title');
+      var articleDetailDescription = document.getElementById('article-detail-description');
       var articleDetailImageWrap = document.getElementById('article-detail-image-wrap');
       var articleDetailBack = document.getElementById('article-detail-back');
       var articleListScrollBeforeDetail = 0;
@@ -1820,6 +1821,18 @@
           articleDetailWrap.classList.add('is-visible');
           articleDetailWrap.setAttribute('aria-hidden', 'false');
           if (articleDetailTitle) articleDetailTitle.textContent = a.title || '';
+          if (articleDetailDescription) {
+            if (a.detailDescription || a.detailResponsibility) {
+              var parts = [];
+              if (a.detailDescription) parts.push('<p>' + a.detailDescription.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') + '</p>');
+              if (a.detailResponsibility) parts.push('<p>' + a.detailResponsibility.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') + '</p>');
+              articleDetailDescription.innerHTML = parts.join('');
+              articleDetailDescription.style.display = '';
+            } else {
+              articleDetailDescription.innerHTML = '';
+              articleDetailDescription.style.display = 'none';
+            }
+          }
           var imgSrc = a.image || a.thumb || '';
           if (articleDetailImageWrap) {
             articleDetailImageWrap.innerHTML = imgSrc ? '<img src="' + imgSrc.replace(/"/g, '&quot;') + '" alt="" loading="lazy" decoding="async">' : '';
