@@ -812,13 +812,7 @@
     .article-detail-wrap.is-visible { display: block; }
     .article-list-wrap.is-hidden { display: none; }
     .article-detail-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.95rem;
+      display: none;
     }
     .article-detail-back:hover { color: var(--accent-blue); }
     .article-detail-title {
@@ -938,7 +932,7 @@
         padding: 1rem;
       }
       #article.article-view-detail .article-detail-wrap.is-visible {
-        padding-top: 0;
+        padding-top: 0.8rem;
       }
       #article.article-view-detail .article-detail-back {
         margin-bottom: 1rem;
@@ -1323,7 +1317,7 @@
         padding: 0;
       }
       body.swipe-mode #article.article-view-detail {
-        padding-top: 4rem;
+        padding-top: 5.5rem;
       }
       body.swipe-mode #article.article-view-detail .article-detail-wrap.is-visible {
         padding-left: clamp(1rem, 5vw, 2rem);
@@ -1455,9 +1449,9 @@
     </div>
     <p class="tagline">Designer, AI learner, daily observer. No-code independent developer. Focused on AI, LLM, and design.</p>
     <div class="about-links hero-links">
-      <a href="https://xhslink.com/m/1xzlmbP3IhU" target="_blank" rel="noopener" class="about-link-btn" data-hover-img="xiaohongshu.png"><span>👋</span><span>小红书</span></a>
-      <span class="about-link-btn" style="cursor: default;" data-hover-img="wechat.png"><span>👋</span><span>WeChat</span></span>
-      <a href="https://web.okjike.com" target="_blank" rel="noopener" class="about-link-btn hero-link-jike" data-hover-img="jike.png"><span>👋</span><span>即刻</span></a>
+      <a href="https://xhslink.com/m/1xzlmbP3IhU" target="_blank" rel="noopener" class="about-link-btn" data-hover-img="xiaohongshu.jpg"><span>👋</span><span>小红书</span></a>
+      <span class="about-link-btn" style="cursor: default;" data-hover-img="wechat.jpg"><span>👋</span><span>WeChat</span></span>
+      <a href="https://web.okjike.com" target="_blank" rel="noopener" class="about-link-btn hero-link-jike" data-hover-img="jike.jpg"><span>👋</span><span>即刻</span></a>
     </div>
     <div class="about-hover-preview" id="about-hover-preview" aria-hidden="true"><img src="" alt=""></div>
   </section>
@@ -1536,30 +1530,30 @@
       var ARTICLE_LIST = [
         {
           id: '1',
-          thumb: 'article/article_1.png',
+          thumb: 'article/article_1.jpg',
           title: 'TECHOPARK概念的定义与理解',
           category: '品牌 / 策略',
           excerpt: '腾讯 Techo 开发者大会是腾讯云发起的全球技术盛会，聚焦前沿科技与开发者成长。本次项目以“0”为核心符号，融合多元演讲者形象与NFT概念，打造创新视觉表达。',
           date: '2025-01-01',
-          image: 'article/1/img_1.png'
+          image: 'article/1/img_1.jpg'
         },
         {
           id: '2',
-          thumb: 'article/article_2.png',
+          thumb: 'article/article_2.jpg',
           title: '腾讯云官网图形重塑',
           category: '概念 / 视觉 / 动效',
           excerpt: '腾讯云的官网是用户接触腾讯云产品重要的渠道之一,官网是腾讯云设计内容当中图形视觉和 图形表达要求较高的场景之一。 负责整个官网模型的图形工作:3D风格定调,3D模型,网页图片风格定调,配图。 项目上线之后得到了有来自于设计行业和普通用户很多认可。',
           date: '2025-01-02',
-          image: 'article/2/img_2.png'
+          image: 'article/2/img_2.jpg'
         },
         {
           id: '3',
-          thumb: 'article/article_3.png',
+          thumb: 'article/article_3.jpg',
           title: '腾讯云设计品牌升级',
           category: '概念 / 视觉',
           excerpt: '品牌焕新，是一次重新定义自我的过程。我们希望通过更系统化的表达，呈现腾讯云设计团队在技术语境下的创造能力与专业态度，让设计成为推动创新与连接世界的重要力量。',
           date: '2025-01-03',
-          image: 'article/3/img_3.png'
+          image: 'article/3/img_3.jpg'
         },
         {
           id: '4',
@@ -1568,7 +1562,7 @@
           category: '视觉',
           excerpt: '它不是普通的企鹅，也不是严肃的会议工具，它是腾讯会议的灵魂代言人',
           date: '2025-01-15',
-          image: 'article/4/img_4.png'
+          image: 'article/4/img_4.jpg'
         },
         {
           id: '5',
@@ -1577,7 +1571,7 @@
           category: '视觉 / UX',
           excerpt: '日常工作内容的记录，大会的官网，节日活动',
           date: '2025-01-20',
-          image: 'article/article_5/img_5.png'
+          image: 'article/article_5/img_5.jpg'
         }
       ];
 
@@ -1686,9 +1680,12 @@
       var articleDetailTitle = document.getElementById('article-detail-title');
       var articleDetailImageWrap = document.getElementById('article-detail-image-wrap');
       var articleDetailBack = document.getElementById('article-detail-back');
+      var articleListScrollBeforeDetail = 0;
 
       function renderArticleList() {
         if (!articleListEl || !ARTICLE_LIST || !ARTICLE_LIST.length) return;
+        var isPC = window.innerWidth >= 768;
+        var articleLinkAttrs = isPC ? ' target="_blank" rel="noopener"' : '';
         articleListEl.innerHTML = ARTICLE_LIST.map(function (a, i) {
           var id = a.id || (i + 1);
           var alt = (a.title || 'Article').replace(/"/g, '&quot;');
@@ -1700,9 +1697,10 @@
           var total = (ARTICLE_LIST.length).toString();
           if (total.length < 2) total = '0' + total;
           var mobileImg = 'article/m_article_' + (i + 1) + '.jpg';
+          var href = window.location.origin + window.location.pathname + window.location.search + '#article/' + id;
           return '<li class="article-item">' +
             '<div class="article-item-inner">' +
-            '<a href="#article/' + id + '" class="article-item-link">' +
+            '<a href="' + (isPC ? href : '#article/' + id) + '"' + articleLinkAttrs + ' class="article-item-link">' +
             '<div class="article-item-card">' +
             '<div class="article-item-left">' +
             '<span class="article-item-tag">' +
@@ -1770,6 +1768,7 @@
       }
 
       function showArticleDetail(id) {
+        articleListScrollBeforeDetail = articleListWrap ? articleListWrap.scrollTop : 0;
         document.body.classList.remove('article-list-view');
         document.documentElement.classList.remove('article-list-view');
         var a = ARTICLE_LIST && ARTICLE_LIST.find(function (item) { return String(item.id) === String(id); });
@@ -1804,7 +1803,7 @@
         renderAiList();
       }
 
-      function showOnly(key) {
+      function showOnly(key, preserveArticleScroll) {
         if (key !== 'article') {
           document.body.classList.remove('article-list-view');
           document.documentElement.classList.remove('article-list-view');
@@ -1816,11 +1815,13 @@
         }
         document.body.setAttribute('data-tab', key);
         setNavActive(key);
-        if (!document.body.classList.contains('swipe-mode')) {
-          window.scrollTo(0, 0);
+        if (!preserveArticleScroll) {
+          if (!document.body.classList.contains('swipe-mode')) {
+            window.scrollTo(0, 0);
+          }
+          var pageKey = (key === 'home') ? 'hero' : key;
+          resetPageScrollToTop(pageKey);
         }
-        var pageKey = (key === 'home') ? 'hero' : key;
-        resetPageScrollToTop(pageKey);
       }
 
       var navBgByKey = { hero: 'dark', projects: 'white', ai: 'white', article: 'white', about: 'dark' };
@@ -1938,7 +1939,16 @@
         if (hash === 'about') { showOnly('about'); }
         else if (hash === 'projects') { showOnly('projects'); }
         else if (hash === 'ai') { showOnly('ai'); showAiList(); }
-        else if (hash === 'article') { showOnly('article'); showArticleList(); }
+        else if (hash === 'article') {
+          var isReturningFromDetail = sections.article && sections.article.classList.contains('article-view-detail');
+          showOnly('article', isReturningFromDetail);
+          showArticleList();
+          if (isReturningFromDetail && articleListWrap) {
+            requestAnimationFrame(function () {
+              articleListWrap.scrollTop = articleListScrollBeforeDetail;
+            });
+          }
+        }
         else if (hash.indexOf('article/') === 0) {
           var rest = hash.slice(8);
           var slash = rest.indexOf('/');
