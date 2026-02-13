@@ -838,6 +838,11 @@
       margin-top: 1.5rem;
       width: 100%;
     }
+    @media (min-width: 768px) {
+      .article-detail-image-wrap {
+        margin-top: 2.5rem;
+      }
+    }
     .article-detail-image-wrap img {
       width: 100%;
       max-width: 100%;
@@ -1538,15 +1543,16 @@
         }
         var moveFactorBg = 0.008;
         var moveFactorChar = 0.015;
+        var moveFactorY = 0.35;
         if ('ontouchstart' in window) return;
         document.addEventListener('mousemove', function (e) {
           var centerX = window.innerWidth / 2;
           var centerY = window.innerHeight / 2;
           var offsetX = (e.clientX - centerX) * moveFactorBg;
-          var offsetY = (e.clientY - centerY) * moveFactorBg;
+          var offsetY = (e.clientY - centerY) * moveFactorBg * moveFactorY;
           layerBg.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
           offsetX = (e.clientX - centerX) * moveFactorChar;
-          offsetY = (e.clientY - centerY) * moveFactorChar;
+          offsetY = (e.clientY - centerY) * moveFactorChar * moveFactorY;
           layerChar.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
         });
       })();
