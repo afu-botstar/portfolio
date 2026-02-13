@@ -566,8 +566,7 @@
     #article.article-view-detail .section-inner > h2 {
       display: none;
     }
-    #article.article-view-detail .article-detail-wrap.is-visible,
-    #article.article-view-detail .article-editor-wrap.is-visible {
+    #article.article-view-detail .article-detail-wrap.is-visible {
       padding-top: 80px;
     }
 
@@ -825,112 +824,16 @@
       color: #000;
       line-height: 1.2;
     }
-    .article-detail-meta { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 2rem; }
-    #article.article-view-detail .article-detail-meta { display: none; }
-    .article-detail-content {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--text);
+    .article-detail-image-wrap {
+      margin-top: 1.5rem;
+      width: 100%;
     }
-    .article-detail-content h3 { margin: 1.5em 0 0.5em; font-size: 1.2em; }
-    .article-detail-content p { margin-bottom: 1em; }
-    .article-detail-content img {
+    .article-detail-image-wrap img {
       width: 100%;
       max-width: 100%;
       height: auto;
       display: block;
-      border-radius: 0;
     }
-    .article-detail-content .article-missing-img,
-    .article-detail-content .article-missing-video {
-      display: inline-block;
-      padding: 0.5rem 0.75rem;
-      margin: 0.25rem 0;
-      background: rgba(0, 0, 0, 0.06);
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      border-radius: 4px;
-    }
-    .article-detail-content video {
-      width: 100%;
-      max-width: 100%;
-      height: auto;
-      display: block;
-      border-radius: var(--radius);
-      background: #000;
-    }
-    .article-detail-edit-link {
-      display: inline-block;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      text-decoration: none;
-    }
-    .article-detail-edit-link:hover { color: var(--accent-blue); }
-    .article-editor-wrap {
-      display: none;
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-    .article-editor-wrap.is-visible { display: block; }
-    .article-editor-wrap .article-editor-label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .article-editor-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
-    }
-    .article-editor-toolbar button {
-      padding: 0.4rem 0.9rem;
-      font-family: var(--font);
-      font-size: 0.875rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text);
-    }
-    .article-editor-toolbar button:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
-    .article-editor-hint {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      align-self: center;
-      margin-left: 0.5rem;
-    }
-    .article-editor-textarea {
-      width: 100%;
-      min-height: 320px;
-      padding: 1rem;
-      font-family: var(--font);
-      font-size: 1rem;
-      line-height: 1.6;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      resize: vertical;
-    }
-    .article-editor-actions {
-      margin-top: 1rem;
-      display: flex;
-      gap: 0.75rem;
-    }
-    .article-editor-actions button {
-      padding: 0.6rem 1.25rem;
-      font-family: var(--font);
-      font-size: 0.95rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text);
-    }
-    .article-editor-actions button:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
-    .article-editor-actions button.primary { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
-    .article-editor-actions button.primary:hover { opacity: 0.9; }
     @media (max-width: 1023px) {
       .article-item-card {
         flex-direction: column;
@@ -1023,46 +926,23 @@
       .article-item-inner {
         padding: 1rem;
       }
-      #article.article-view-detail .article-detail-wrap.is-visible,
-      #article.article-view-detail .article-editor-wrap.is-visible {
+      #article.article-view-detail .article-detail-wrap.is-visible {
         padding-top: 0;
       }
       #article.article-view-detail .article-detail-back {
         margin-bottom: 1rem;
       }
-      #article.article-view-detail .article-detail-meta {
-        margin-bottom: 1rem;
-      }
-      /* 文章详情移动端：与 PC 一致的阅读区域，避免异常块状/蓝色背景 */
+      /* 文章详情移动端 */
       #article.article-view-detail .article-detail-wrap {
         padding-left: 1rem;
         padding-right: 1rem;
         padding-bottom: 2rem;
         box-sizing: border-box;
       }
-      #article.article-view-detail .article-detail-content {
-        max-width: 100%;
-        overflow-x: hidden;
-      }
-      #article.article-view-detail .article-detail-content img {
+      #article.article-view-detail .article-detail-image-wrap img {
         max-width: 100%;
         height: auto;
         display: block;
-        margin: 1em 0;
-        background: transparent;
-        border-radius: 4px;
-      }
-      #article.article-view-detail .article-detail-content p {
-        max-width: 100%;
-      }
-      #article.article-view-detail .article-detail-content div,
-      #article.article-view-detail .article-detail-content figure {
-        max-width: 100%;
-        background: transparent !important;
-      }
-      #article.article-view-detail .article-detail-content img {
-        min-height: 0;
-        object-fit: contain;
       }
     }
 
@@ -1426,6 +1306,22 @@
         max-width: none;
         padding: 0;
       }
+      body.swipe-mode #article.article-view-detail {
+        padding-top: 4rem;
+      }
+      body.swipe-mode #article.article-view-detail .article-detail-wrap.is-visible {
+        padding-left: clamp(1rem, 5vw, 2rem);
+        padding-right: clamp(1rem, 5vw, 2rem);
+        padding-bottom: 2rem;
+        max-width: 1280px;
+        margin-left: auto;
+        margin-right: auto;
+        box-sizing: border-box;
+      }
+      body.swipe-mode #article.article-view-detail .article-detail-image-wrap {
+        width: 100%;
+        max-width: 100%;
+      }
       /* Tab 栏可横向滚动，点击时选中项滚动到视口中心 */
       #main-nav { padding: 0.4rem 0.6rem; }
       #main-nav .nav-inner {
@@ -1576,28 +1472,7 @@
       <div class="article-detail-wrap" id="article-detail-wrap" aria-hidden="true">
         <a href="#article" class="article-detail-back" id="article-detail-back">← 返回列表</a>
         <h1 class="article-detail-title" id="article-detail-title"></h1>
-        <p class="article-detail-meta" id="article-detail-meta"></p>
-        <div class="article-detail-content" id="article-detail-content"></div>
-        <a href="#" class="article-detail-edit-link" id="article-detail-edit-link">编辑正文</a>
-      </div>
-      <div class="article-editor-wrap" id="article-editor-wrap" aria-hidden="true">
-        <a href="#article" class="article-detail-back" id="article-editor-back">← 返回列表</a>
-        <h2 class="article-detail-title" id="article-editor-title" style="margin-bottom:1rem;"></h2>
-        <label class="article-editor-label" for="article-editor-textarea">正文</label>
-        <div class="article-editor-toolbar">
-          <button type="button" id="article-editor-insert-p">插入段落</button>
-          <input type="file" id="article-editor-upload-img" accept="image/*" multiple style="display:none;">
-          <button type="button" id="article-editor-insert-img">插入图片（可批量本地上传）</button>
-          <input type="file" id="article-editor-upload-video" accept="video/*" style="display:none;">
-          <button type="button" id="article-editor-insert-video">插入视频</button>
-          <button type="button" id="article-editor-insert-h3">插入小标题</button>
-          <span class="article-editor-hint">单篇约 5MB 限制，图片/视频过多请分批或压缩后上传</span>
-        </div>
-        <textarea class="article-editor-textarea" id="article-editor-textarea" placeholder="在此输入或粘贴正文。可用上方按钮插入段落、图片、小标题。"></textarea>
-        <div class="article-editor-actions">
-          <button type="button" class="primary" id="article-editor-save">保存</button>
-          <a href="#" id="article-editor-cancel" style="padding:0.6rem 1.25rem;font-size:0.95rem;color:var(--text-muted);">取消</a>
-        </div>
+        <div class="article-detail-image-wrap" id="article-detail-image-wrap"></div>
       </div>
     </div>
   </section>
@@ -1640,7 +1515,7 @@
         'work25.jpg', 'work26.jpg', 'work28.jpg', 'work30.jpg', 'work31.jpg'
       ];
 
-      /* 文章列表：在此添加/修改文章，每项含 id、thumb、title、excerpt、date、content；content 为正文 HTML */
+      /* 文章列表：每项含 id、thumb、title、excerpt、date、image（详情页长图，无则用 thumb） */
       var ARTICLE_LIST = [
         {
           id: '1',
@@ -1649,7 +1524,7 @@
           category: '品牌 / 策略',
           excerpt: '腾讯 Techo 开发者大会是腾讯云发起的全球技术盛会，聚焦前沿科技与开发者成长。本次项目以“0”为核心符号，融合多元演讲者形象与NFT概念，打造创新视觉表达。',
           date: '2025-01-01',
-          content: '<p>在这里填写正文，或点击文章页的「编辑正文」在编辑器中填写。</p><p>支持 <strong>加粗</strong>、<em>斜体</em>、<h3>小标题</h3>，以及图片：<img src="article/article_1.png" alt=""></p>'
+          image: 'article/1/img_1.png'
         },
         {
           id: '2',
@@ -1658,7 +1533,7 @@
           category: '概念 / 视觉 / 动效',
           excerpt: '腾讯云的官网是用户接触腾讯云产品重要的渠道之一,官网是腾讯云设计内容当中图形视觉和 图形表达要求较高的场景之一。 负责整个官网模型的图形工作:3D风格定调,3D模型,网页图片风格定调,配图。 项目上线之后得到了有来自于设计行业和普通用户很多认可。',
           date: '2025-01-02',
-          content: '<p>第二篇文章的正文内容。</p><p>在 ARTICLE_LIST 里为每篇文章加一项，填 title、excerpt、date、content 即可。</p>'
+          image: 'article/2/img_2.png'
         },
         {
           id: '3',
@@ -1667,7 +1542,7 @@
           category: '概念 / 视觉',
           excerpt: '品牌焕新，是一次重新定义自我的过程。我们希望通过更系统化的表达，呈现腾讯云设计团队在技术语境下的创造能力与专业态度，让设计成为推动创新与连接世界的重要力量。',
           date: '2025-01-03',
-          content: '<p>第三篇正文。</p>'
+          image: 'article/3/img_3.png'
         },
         {
           id: '4',
@@ -1676,7 +1551,7 @@
           category: '视觉',
           excerpt: '它不是普通的企鹅，也不是严肃的会议工具，它是腾讯会议的灵魂代言人',
           date: '2025-01-15',
-          content: '<p>腾讯会议 IP 形象设计，围绕品牌调性打造统一、易识别的视觉形象。</p><p><img src="article/article_4.jpg" alt="腾讯会议IP形象设计"></p><p>本文记录从策略到落地的完整流程与设计决策。</p>'
+          image: 'article/4/img_4.png'
         },
         {
           id: '5',
@@ -1685,7 +1560,7 @@
           category: '视觉 / UX',
           excerpt: '日常工作内容的记录，大会的官网，节日活动',
           date: '2025-01-20',
-          content: '<p>围绕核心功能设计主视觉与动效节奏，兼顾品牌调性与可用性。</p><p>可在此补充项目背景、设计思路与落地效果。</p>'
+          image: 'article/article_5/img_5.png'
         }
       ];
 
@@ -1788,249 +1663,8 @@
       var aiListWrap = document.getElementById('ai-list-wrap');
       var articleDetailWrap = document.getElementById('article-detail-wrap');
       var articleDetailTitle = document.getElementById('article-detail-title');
-      var articleDetailMeta = document.getElementById('article-detail-meta');
-      var articleDetailContent = document.getElementById('article-detail-content');
+      var articleDetailImageWrap = document.getElementById('article-detail-image-wrap');
       var articleDetailBack = document.getElementById('article-detail-back');
-      var articleDetailEditLink = document.getElementById('article-detail-edit-link');
-      var articleEditorWrap = document.getElementById('article-editor-wrap');
-      var articleEditorTitle = document.getElementById('article-editor-title');
-      var articleEditorTextarea = document.getElementById('article-editor-textarea');
-      var articleEditorSave = document.getElementById('article-editor-save');
-      var articleEditorBack = document.getElementById('article-editor-back');
-      var articleEditorCancel = document.getElementById('article-editor-cancel');
-
-      function insertAtCursor(ta, before, after) {
-        if (!ta) return;
-        var start = ta.selectionStart;
-        var end = ta.selectionEnd;
-        var val = ta.value;
-        var sel = val.slice(start, end);
-        var newVal = val.slice(0, start) + (before + sel + (after || '')) + val.slice(end);
-        ta.value = newVal;
-        ta.focus();
-        ta.selectionStart = ta.selectionEnd = start + before.length + sel.length;
-      }
-
-      function onEditorInsertP() {
-        insertAtCursor(articleEditorTextarea, '<p>', '</p>');
-      }
-      function onEditorInsertImg() {
-        var fileInput = document.getElementById('article-editor-upload-img');
-        if (fileInput) {
-          fileInput.click();
-        }
-      }
-      function onEditorImageFileChosen(e) {
-        var files = e.target && e.target.files;
-        if (!files || !files.length || !articleEditorTextarea) return;
-        var list = [];
-        for (var i = 0; i < files.length; i++) {
-          var f = files[i];
-          var isImage = (f.type && f.type.match(/^image\//)) || /\.(png|jpe?g|gif|webp|bmp)$/i.test(f.name || '');
-          if (isImage) list.push(f);
-        }
-        if (list.length === 0) {
-          e.target.value = '';
-          alert('未选中有效图片，请选择 PNG/JPG/GIF/WebP 等图片文件。');
-          return;
-        }
-        var articleId = currentArticleIdForEditor;
-        if (!articleId) {
-          var hash = (window.location.hash || '').replace(/^#/, '');
-          articleId = (hash.indexOf('article/') === 0 && hash.indexOf('/edit') > 0) ? hash.slice(8, hash.indexOf('/edit')) : (hash.indexOf('article/') === 0 ? hash.slice(8) : '1');
-        }
-        var index = 0;
-        var htmlParts = [];
-        var failed = [];
-        function readNext() {
-          if (index >= list.length) {
-            if (htmlParts.length) {
-              insertAtCursor(articleEditorTextarea, htmlParts.join(''), '');
-              var msg = '已插入 ' + htmlParts.length + ' 张图片。';
-              if (failed.length) msg += '\n以下文件读取失败：' + failed.join('、');
-              alert(msg);
-            } else if (failed.length) {
-              alert('图片读取失败：' + failed.join('、'));
-            }
-            e.target.value = '';
-            return;
-          }
-          var file = list[index];
-          var id = 'img_' + Date.now() + '_' + index + '_' + Math.random().toString(36).slice(2);
-          var filename = (file.name || '图片' + (index + 1)).replace(/"/g, '&quot;');
-          var reader = new FileReader();
-          reader.onload = function (ev) {
-            var dataUrl = ev.target && ev.target.result;
-            if (dataUrl) {
-              currentEditorImgMap[id] = { dataUrl: dataUrl, filename: file.name || ('图片' + (index + 1)) };
-              htmlParts.push('<p><img data-img-id="' + id + '" src="[图片: ' + filename + ']" alt="' + filename + '"></p>');
-            }
-            index++;
-            readNext();
-          };
-          reader.onerror = function () {
-            failed.push(file.name || ('第' + (index + 1) + '个文件'));
-            index++;
-            readNext();
-          };
-          reader.readAsDataURL(file);
-        }
-        readNext();
-      }
-      var uploadImgInput = document.getElementById('article-editor-upload-img');
-      if (uploadImgInput) uploadImgInput.addEventListener('change', onEditorImageFileChosen);
-      function onEditorInsertVideo() {
-        var fileInput = document.getElementById('article-editor-upload-video');
-        if (fileInput) fileInput.click();
-      }
-      function onEditorVideoFileChosen(e) {
-        var file = e.target && e.target.files && e.target.files[0];
-        if (!file || !articleEditorTextarea) { e.target.value = ''; return; }
-        var isVideo = (file.type && file.type.match(/^video\//)) || /\.(mp4|webm|ogg|mov|avi|mkv)$/i.test(file.name || '');
-        if (!isVideo) {
-          e.target.value = '';
-          alert('请选择视频文件（如 MP4、WebM、OGG 等）。');
-          return;
-        }
-        if (file.size > 20 * 1024 * 1024) {
-          e.target.value = '';
-          alert('视频建议不超过 20MB，过大可能无法保存或导致页面卡顿。');
-          return;
-        }
-        var id = 'video_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-        var filename = (file.name || '视频').replace(/"/g, '&quot;');
-        var reader = new FileReader();
-        reader.onload = function (ev) {
-          var dataUrl = ev.target && ev.target.result;
-          if (dataUrl) {
-            currentEditorVideoMap[id] = { dataUrl: dataUrl, filename: file.name || '视频' };
-            insertAtCursor(articleEditorTextarea, '<p><video data-video-id="' + id + '" src="[视频: ' + filename + ']" controls></video></p>', '');
-            alert('已插入视频，保存文章后生效。');
-          }
-          e.target.value = '';
-        };
-        reader.onerror = function () {
-          alert('视频读取失败，请重试。');
-          e.target.value = '';
-        };
-        reader.readAsDataURL(file);
-      }
-      var uploadVideoInput = document.getElementById('article-editor-upload-video');
-      if (uploadVideoInput) uploadVideoInput.addEventListener('change', onEditorVideoFileChosen);
-      function onEditorInsertH3() {
-        insertAtCursor(articleEditorTextarea, '<h3>', '</h3>');
-      }
-      var btnP = document.getElementById('article-editor-insert-p');
-      var btnImg = document.getElementById('article-editor-insert-img');
-      var btnVideo = document.getElementById('article-editor-insert-video');
-      var btnH3 = document.getElementById('article-editor-insert-h3');
-      if (btnP) btnP.addEventListener('click', onEditorInsertP);
-      if (btnImg) btnImg.addEventListener('click', onEditorInsertImg);
-      if (btnVideo) btnVideo.addEventListener('click', onEditorInsertVideo);
-      if (btnH3) btnH3.addEventListener('click', onEditorInsertH3);
-
-      var currentEditorImgMap = {};
-      var currentEditorVideoMap = {};
-      var currentArticleIdForEditor = null;
-      function getArticleImageMap(id) {
-        try {
-          var raw = localStorage.getItem('article_img_map_' + id);
-          if (raw) return JSON.parse(raw);
-        } catch (e) {}
-        return {};
-      }
-      function setArticleImageMap(id, map) {
-        try {
-          localStorage.setItem('article_img_map_' + id, JSON.stringify(map));
-        } catch (e) {}
-      }
-      function getArticleVideoMap(id) {
-        try {
-          var raw = localStorage.getItem('article_video_map_' + id);
-          if (raw) return JSON.parse(raw);
-        } catch (e) {}
-        return {};
-      }
-      function setArticleVideoMap(id, map) {
-        try {
-          localStorage.setItem('article_video_map_' + id, JSON.stringify(map));
-        } catch (e) {}
-      }
-      function replaceOneImg(_, pre, id, mid, post, map, forDisplay) {
-        var item = map[id];
-        var src = (item && item.dataUrl) ? item.dataUrl : '';
-        if (forDisplay && !src) return '<span class="article-missing-img">[图片缺失]</span>';
-        return '<img' + pre + mid + ' src="' + src.replace(/"/g, '&quot;') + '" loading="lazy"' + post + '>';
-      }
-      function replaceOneVideo(_, pre, id, mid, post, map, forDisplay) {
-        var item = map[id];
-        var src = (item && item.dataUrl) ? item.dataUrl : '';
-        if (forDisplay && !src) return '<span class="article-missing-video">[视频缺失]</span>';
-        return '<video' + pre + mid + ' src="' + src.replace(/"/g, '&quot;') + '"' + post + '>';
-      }
-      function expandContentForSave(collapsedHtml, imgMap, videoMap) {
-        if (!collapsedHtml) return collapsedHtml || '';
-        var map = imgMap || {};
-        function replaceOneImg_(_, pre, id, mid, post) { return replaceOneImg(_, pre, id, mid, post, map, false); }
-        var r = collapsedHtml.replace(/<img([^>]*?)data-img-id="([^"]+)"([^>]*?)src="\[(?:图片|Image):[^"]*\]"([^>]*)>/gi, replaceOneImg_);
-        r = r.replace(/<img([^>]*?)src="\[(?:图片|Image):[^"]*\]"([^>]*?)data-img-id="([^"]+)"([^>]*)>/gi, function (_, pre, mid, id, post) {
-          return replaceOneImg_(_, pre, id, mid, post);
-        });
-        var vmap = videoMap || {};
-        function replaceOneVideo_(_, pre, id, mid, post) { return replaceOneVideo(_, pre, id, mid, post, vmap, false); }
-        r = r.replace(/<video([^>]*?)data-video-id="([^"]+)"([^>]*?)src="\[(?:视频|Video):[^"]*\]"([^>]*)>/gi, replaceOneVideo_);
-        r = r.replace(/<video([^>]*?)src="\[(?:视频|Video):[^"]*\]"([^>]*?)data-video-id="([^"]+)"([^>]*)>/gi, function (_, pre, mid, id, post) {
-          return replaceOneVideo_(_, pre, id, mid, post);
-        });
-        return r;
-      }
-      function expandContentForDisplay(html, imgMap, videoMap) {
-        if (!html) return html || '';
-        var m = imgMap || {};
-        function replaceOneImg_(_, pre, id, mid, post) { return replaceOneImg(_, pre, id, mid, post, m, true); }
-        var r = html.replace(/<img([^>]*?)data-img-id="([^"]+)"([^>]*?)src="\[(?:图片|Image):[^"]*\]"([^>]*)>/gi, replaceOneImg_);
-        r = r.replace(/<img([^>]*?)src="\[(?:图片|Image):[^"]*\]"([^>]*?)data-img-id="([^"]+)"([^>]*)>/gi, function (_, pre, mid, id, post) {
-          return replaceOneImg_(_, pre, id, mid, post);
-        });
-        r = r.replace(/<img[^>]*?src="\[(?:图片|Image):[^"]*\]"[^>]*>/gi, '<span class="article-missing-img">[图片缺失]</span>');
-        var vm = videoMap || {};
-        function replaceOneVideo_(_, pre, id, mid, post) { return replaceOneVideo(_, pre, id, mid, post, vm, true); }
-        r = r.replace(/<video([^>]*?)data-video-id="([^"]+)"([^>]*?)src="\[(?:视频|Video):[^"]*\]"([^>]*)>/gi, replaceOneVideo_);
-        r = r.replace(/<video([^>]*?)src="\[(?:视频|Video):[^"]*\]"([^>]*?)data-video-id="([^"]+)"([^>]*)>/gi, function (_, pre, mid, id, post) {
-          return replaceOneVideo_(_, pre, id, mid, post);
-        });
-        r = r.replace(/<video[^>]*?src="\[(?:视频|Video):[^"]*\]"[^>]*>/gi, '<span class="article-missing-video">[视频缺失]</span>');
-        return r;
-      }
-      function collapseContentForEditor(expandedHtml, articleId, imgMapOut, videoMapOut) {
-        var map = imgMapOut || {};
-        var vmap = videoMapOut || {};
-        var count = 0;
-        var out = expandedHtml.replace(/<img\s+([^>]*?)src="(data:image\/[^"]+)"([^>]*)>/gi, function (_, before, dataUrl, after) {
-          count++;
-          var id = 'img_' + Date.now() + '_' + count + '_' + Math.random().toString(36).slice(2);
-          map[id] = { dataUrl: dataUrl, filename: '图片' + count };
-          return '<img ' + before + 'data-img-id="' + id + '" src="[图片: 图片' + count + ']"' + after + '>';
-        });
-        var vcount = 0;
-        out = out.replace(/<video\s+([^>]*?)src="(data:video\/[^"]+)"([^>]*)>/gi, function (_, before, dataUrl, after) {
-          vcount++;
-          var id = 'video_' + Date.now() + '_' + vcount + '_' + Math.random().toString(36).slice(2);
-          vmap[id] = { dataUrl: dataUrl, filename: '视频' + vcount };
-          return '<video ' + before + 'data-video-id="' + id + '" src="[视频: 视频' + vcount + ']"' + after + '>';
-        });
-        if (!videoMapOut) setArticleVideoMap(articleId, vmap);
-        if (!imgMapOut) setArticleImageMap(articleId, map);
-        return out;
-      }
-      function getArticleContent(id) {
-        try {
-          var saved = localStorage.getItem('article_content_' + id);
-          if (saved !== null && saved !== '') return saved;
-        } catch (e) {}
-        var a = ARTICLE_LIST && ARTICLE_LIST.find(function (item) { return String(item.id) === String(id); });
-        return (a && a.content) ? a.content : '';
-      }
 
       function renderArticleList() {
         if (!articleListEl || !ARTICLE_LIST || !ARTICLE_LIST.length) return;
@@ -2112,7 +1746,6 @@
         }
         if (articleListWrap) articleListWrap.classList.remove('is-hidden');
         if (articleDetailWrap) { articleDetailWrap.classList.remove('is-visible'); articleDetailWrap.setAttribute('aria-hidden', 'true'); }
-        if (articleEditorWrap) { articleEditorWrap.classList.remove('is-visible'); articleEditorWrap.setAttribute('aria-hidden', 'true'); }
       }
 
       function showArticleDetail(id) {
@@ -2125,32 +1758,14 @@
           sections.article.classList.remove('article-showing-list');
         }
         if (articleListWrap) articleListWrap.classList.add('is-hidden');
-        if (articleEditorWrap) { articleEditorWrap.classList.remove('is-visible'); articleEditorWrap.setAttribute('aria-hidden', 'true'); }
         if (articleDetailWrap) {
           articleDetailWrap.classList.add('is-visible');
           articleDetailWrap.setAttribute('aria-hidden', 'false');
           if (articleDetailTitle) articleDetailTitle.textContent = a.title || '';
-          if (articleDetailMeta) articleDetailMeta.textContent = a.date || '';
-          if (articleDetailContent) articleDetailContent.innerHTML = expandContentForDisplay(getArticleContent(id), getArticleImageMap(id), getArticleVideoMap(id));
-          if (articleDetailEditLink) { articleDetailEditLink.href = '#article/' + id + '/edit'; articleDetailEditLink.style.display = 'inline-block'; }
-        }
-        if (sections.article) sections.article.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-
-      function showArticleEditor(id) {
-        var a = ARTICLE_LIST && ARTICLE_LIST.find(function (item) { return String(item.id) === String(id); });
-        if (!a) { showArticleList(); return; }
-        if (sections.article) sections.article.classList.add('article-view-detail');
-        if (articleListWrap) articleListWrap.classList.add('is-hidden');
-        if (articleDetailWrap) { articleDetailWrap.classList.remove('is-visible'); articleDetailWrap.setAttribute('aria-hidden', 'true'); }
-        if (articleEditorWrap) {
-          articleEditorWrap.classList.add('is-visible');
-          articleEditorWrap.setAttribute('aria-hidden', 'false');
-          if (articleEditorTitle) articleEditorTitle.textContent = a.title || '';
-          currentArticleIdForEditor = id;
-          currentEditorImgMap = {};
-          currentEditorVideoMap = {};
-          if (articleEditorTextarea) articleEditorTextarea.value = collapseContentForEditor(getArticleContent(id), id, currentEditorImgMap, currentEditorVideoMap);
+          var imgSrc = a.image || a.thumb || '';
+          if (articleDetailImageWrap) {
+            articleDetailImageWrap.innerHTML = imgSrc ? '<img src="' + imgSrc.replace(/"/g, '&quot;') + '" alt="">' : '';
+          }
         }
         if (sections.article) sections.article.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -2307,10 +1922,13 @@
           var rest = hash.slice(8);
           var slash = rest.indexOf('/');
           var articleId = slash >= 0 ? rest.slice(0, slash) : rest;
-          var isEdit = slash >= 0 && rest.slice(slash) === '/edit';
           showOnly('article');
-          if (isEdit) showArticleEditor(articleId);
-          else showArticleDetail(articleId);
+          showArticleDetail(articleId);
+          if (document.body.classList.contains('swipe-mode') && swipeWrapperEl) {
+            var w = swipeWrapperEl.getBoundingClientRect().width;
+            var idx = SWIPE_PAGE_IDS.indexOf('article');
+            if (idx >= 0) swipeWrapperEl.scrollTo({ left: idx * w, behavior: 'smooth' });
+          }
         }
         else { showHome(); }
         var tab = (hash === 'article' || hash.indexOf('article/') === 0) ? 'article' : (hash || 'hero');
@@ -2318,32 +1936,6 @@
         if (hash === 'about' || hash === '' || hash === 'hero') requestAnimationFrame(updateNavBgByScroll);
       }
 
-      if (articleEditorSave) {
-        articleEditorSave.addEventListener('click', function () {
-          var hash = (window.location.hash || '').replace('#', '');
-          if (hash.indexOf('article/') !== 0) return;
-          var rest = hash.slice(8);
-          var slash = rest.indexOf('/');
-          var id = slash >= 0 ? rest.slice(0, slash) : rest;
-          if (!id) return;
-          try {
-            var raw = articleEditorTextarea ? articleEditorTextarea.value : '';
-            var expanded = expandContentForSave(raw, currentEditorImgMap, currentEditorVideoMap);
-            localStorage.setItem('article_content_' + id, expanded);
-            window.location.hash = 'article/' + id;
-          } catch (e) {
-            var isQuota = (e && (e.name === 'QuotaExceededError' || e.code === 22));
-            if (isQuota) {
-              var approx = (expanded.length * 2 / 1024 / 1024).toFixed(2);
-              alert('保存失败：内容过大（约 ' + approx + ' MB，超过 5MB 限制）。\n\n建议：\n1. 减少本篇文章的图片数量；\n2. 或先压缩图片再上传；\n3. 或拆成多篇文章。\n\n当前内容未保存，请删掉部分图片后重试。');
-            } else {
-              alert('保存失败：' + (e && e.message ? e.message : '未知错误'));
-            }
-          }
-        });
-      }
-      if (articleEditorBack) articleEditorBack.addEventListener('click', function (e) { e.preventDefault(); window.location.hash = 'article'; });
-      if (articleEditorCancel) articleEditorCancel.addEventListener('click', function (e) { e.preventDefault(); var h = (window.location.hash || '').replace('#', ''); if (h.indexOf('article/') === 0) { var r = h.slice(8), s = r.indexOf('/'); window.location.hash = 'article/' + (s >= 0 ? r.slice(0, s) : r); } else window.location.hash = 'article'; });
       syncTabFromHash();
       window.addEventListener('hashchange', syncTabFromHash);
 
