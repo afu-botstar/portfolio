@@ -52,6 +52,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html {
@@ -232,6 +233,9 @@
     .hero-name-right {
       left: 100%;
       margin-left: var(--hero-name-gap);
+    }
+    .hero-name-mobile {
+      display: none;
     }
     .hero-card-wrap {
       position: relative;
@@ -822,6 +826,7 @@
       line-height: 1.2;
     }
     .article-detail-meta { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 2rem; }
+    #article.article-view-detail .article-detail-meta { display: none; }
     .article-detail-content {
       font-size: 1rem;
       line-height: 1.7;
@@ -974,6 +979,27 @@
         font-size: 14px;
         padding: 0.75rem 1.5rem;
       }
+      /* Design 模块移动端：配图在「查看详情」按钮下方，卡片内部最底部 */
+      #article .article-item-mobile-img {
+        display: block;
+        margin-top: 1.25rem;
+        width: 100%;
+        line-height: 0;
+        flex-shrink: 0;
+      }
+      #article .article-item-mobile-img img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+      #ai .article-item-mobile-img {
+        display: none;
+      }
+    }
+    .article-item-mobile-img {
+      display: none;
     }
     @media (max-width: 768px) {
       .article-item-link {
@@ -991,6 +1017,37 @@
       }
       #article.article-view-detail .article-detail-meta {
         margin-bottom: 1rem;
+      }
+      /* 文章详情移动端：与 PC 一致的阅读区域，避免异常块状/蓝色背景 */
+      #article.article-view-detail .article-detail-wrap {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 2rem;
+        box-sizing: border-box;
+      }
+      #article.article-view-detail .article-detail-content {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      #article.article-view-detail .article-detail-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1em 0;
+        background: transparent;
+        border-radius: 4px;
+      }
+      #article.article-view-detail .article-detail-content p {
+        max-width: 100%;
+      }
+      #article.article-view-detail .article-detail-content div,
+      #article.article-view-detail .article-detail-content figure {
+        max-width: 100%;
+        background: transparent !important;
+      }
+      #article.article-view-detail .article-detail-content img {
+        min-height: 0;
+        object-fit: contain;
       }
     }
 
@@ -1221,20 +1278,48 @@
       width: 100%;
     }
 
+    @media (min-width: 768px) {
+      :root {
+        --tab-to-content: 5rem;
+      }
+    }
     @media (max-width: 640px) {
       :root {
         --tab-to-content: 6rem;
       }
+      /* 顶部留出固定导航高度，内容从下方开始排布，避免插画顶进 Tab 区域 */
       .hero {
-        padding-top: 5rem;
-        --hero-tagline-offset: -140px;
+        padding-top: 5.5rem;
+        padding-bottom: clamp(2rem, 8vw, 4rem);
+        --hero-tagline-offset: 0;
+        justify-content: flex-start;
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+      .hero .tagline {
+        margin-top: 1.25rem;
+      }
+      .hero .hero-links {
+        margin-top: 1.25rem;
       }
       .hero-name { display: none; }
-      .hero-illustration { transform: scale(0.75) translateY(-40px); }
-      nav ul { gap: clamp(0.75rem, 3vw, 1.25rem); flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      /* 不再上移，避免与 Tab 重叠 */
+      .hero-illustration { transform: scale(0.75); }
+      /* 移动端固定插画容器宽高比，使 bg-card 与 home-me 在同一比例下缩放，视觉一致 */
+      .parallax-container {
+        aspect-ratio: 3/4;
+        height: auto;
+        max-height: min(70vh, 560px);
+      }
+      /* 移动端隐藏即刻按钮 */
+      .hero-links .hero-link-jike {
+        display: none;
+      }
+      nav { padding: 0.5rem 0.75rem; }
+      nav .nav-inner { padding: 0.5rem 1rem; }
+      nav ul { gap: clamp(0.5rem, 2vw, 1rem); flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
       nav ul::-webkit-scrollbar { display: none; }
-      nav .nav-inner { padding: 0.85rem 1.25rem; }
-      nav a { padding: 0.5rem 0.35rem; min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+      nav a { padding: 0.4rem 0.5rem; min-height: 36px; min-width: 36px; line-height: 1.2; margin: 0; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem; }
       /* About 移动端：缩小文字、与顶部 tab 留足间距 */
       #about {
         font-size: 1rem;
@@ -1258,15 +1343,156 @@
       }
     }
 
-    /* 最小屏（如 375px 及以下）：减小 tagline 上移量，避免插画与文字重叠 */
+    /* 最小屏（如 375px 及以下）：与 640px 以下一致，不重叠 */
     @media (max-width: 400px) {
       .hero {
-        --hero-tagline-offset: -70px;
+        --hero-tagline-offset: 0;
+      }
+    }
+
+    /* 移动端左右滑动 Tab：仅 < 768px 生效 */
+    @media (max-width: 767px) {
+      .page-wrap {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        flex: 1;
+      }
+      .swipe-wrapper {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+      }
+      .swipe-wrapper .swipe-page {
+        flex: 0 0 100%;
+        width: 100%;
+        min-width: 100%;
+        height: 100%;
+        min-height: 100%;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        overflow-y: auto;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        align-self: stretch;
+      }
+      /* 滑动模式下不按 data-tab 显隐，五块始终参与横向排布；仅中间三块用 block，hero/about 保持 flex 避免内容不显示 */
+      body.swipe-mode #projects,
+      body.swipe-mode #article,
+      body.swipe-mode #ai {
+        display: block !important;
+      }
+      body.swipe-mode #hero,
+      body.swipe-mode #about {
+        display: flex !important;
+      }
+      /* 移动端 Design/Tool 列表页与 swipe 同风格，避免切换时底色和宽度跳闪 */
+      /* 缩小 tab 下方留白(4rem)，避免 tab 与内容间大面积空白遮挡列表 */
+      body.swipe-mode #ai,
+      body.swipe-mode #article {
+        --tab-to-content: 4rem;
+        background: #F2F2F7;
+        padding-top: 4rem;
+        padding-left: 0;
+        padding-right: 0;
+        padding-bottom: 0;
+      }
+      body.swipe-mode #ai .section-inner,
+      body.swipe-mode #article .section-inner {
+        max-width: none;
+        padding: 0;
+      }
+      /* Tab 栏可横向滚动，点击时选中项滚动到视口中心 */
+      #main-nav { padding: 0.4rem 0.6rem; }
+      #main-nav .nav-inner {
+        padding: 0.45rem 0.85rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+      }
+      /* 移动端 swipe 模式：Art/Design/Tool 三块 Tab 视觉完全统一，半透明白底 + 蓝色高亮 */
+      body.swipe-mode[data-tab="projects"] #main-nav .nav-inner,
+      body.swipe-mode[data-tab="article"] #main-nav .nav-inner,
+      body.swipe-mode[data-tab="ai"] #main-nav .nav-inner {
+        background: rgba(255, 255, 255, 0.8);
+        min-height: 0;
+      }
+      /* 移动端 swipe：禁用 article/ai 列表项的 sticky，避免白卡片吸顶时遮挡下方内容 */
+      body.swipe-mode #article .article-item,
+      body.swipe-mode #ai .article-item {
+        position: relative !important;
+        top: auto !important;
+      }
+      #main-nav ul { flex-wrap: nowrap; gap: 0.35rem 0.75rem; }
+      #main-nav a { padding: 0.35rem 0.45rem; min-height: 34px; min-width: 34px; line-height: 1.2; font-size: 0.875rem; }
+      /* 隐藏 footer，让 swipe 区域占满视口，首页渐变全屏 */
+      body.swipe-mode footer {
+        display: none;
+      }
+      /* Hero 移动端垂直堆叠：图片 → AFU ZHANG → 描述 → 按钮 */
+      .hero-center {
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero-name-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 100%;
+      }
+      .hero-name-block .hero-name {
+        display: none;
+      }
+      .hero-name-block .hero-card-wrap {
+        order: 0;
+      }
+      .hero-name-mobile {
+        display: block;
+        order: 1;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        font-size: clamp(2rem, 9vw, 3rem);
+        font-weight: 700;
+        color: #000;
+        letter-spacing: 0.02em;
+        line-height: 1;
+        white-space: nowrap;
+      }
+    }
+
+    .tab-transition-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      background: #f5f5f7;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease-out;
+    }
+    .tab-transition-overlay.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @media (max-width: 767px) {
+      .tab-transition-overlay {
+        display: none !important;
       }
     }
   </style>
 </head>
 <body data-tab="home">
+  <div class="tab-transition-overlay" id="tab-transition-overlay" aria-hidden="true"></div>
   <nav id="main-nav">
     <div class="nav-inner">
       <ul>
@@ -1297,13 +1523,14 @@
           </div>
         </div>
         <span class="hero-name hero-name-right">ZHANG</span>
+        <span class="hero-name-mobile">AFU ZHANG</span>
       </div>
     </div>
     <p class="tagline">Designer, AI learner, daily observer. No-code independent developer. Focused on AI, LLM, and design.</p>
     <div class="about-links hero-links">
-      <a href="https://www.xiaohongshu.com/user/profile/yourid" target="_blank" rel="noopener" class="about-link-btn" data-hover-img="xiaohongshu.png"><span>👋</span><span>小红书</span></a>
+      <a href="https://xhslink.com/m/1xzlmbP3IhU" target="_blank" rel="noopener" class="about-link-btn" data-hover-img="xiaohongshu.png"><span>👋</span><span>小红书</span></a>
       <span class="about-link-btn" style="cursor: default;" data-hover-img="wechat.png"><span>👋</span><span>WeChat</span></span>
-      <a href="https://web.okjike.com" target="_blank" rel="noopener" class="about-link-btn" data-hover-img="jike.png"><span>👋</span><span>即刻</span></a>
+      <a href="https://web.okjike.com" target="_blank" rel="noopener" class="about-link-btn hero-link-jike" data-hover-img="jike.png"><span>👋</span><span>即刻</span></a>
     </div>
     <div class="about-hover-preview" id="about-hover-preview" aria-hidden="true"><img src="" alt=""></div>
   </section>
@@ -1461,7 +1688,7 @@
       if (galleryEl) {
         galleryEl.innerHTML = WORK_IMAGES.map(function (src, i) {
           var alt = 'Work ' + (i + 1);
-          return '<figure class="work-item" role="button" tabindex="0"><img src="' + src.replace(/"/g, '&quot;') + '" alt="' + alt.replace(/"/g, '&quot;') + '"></figure>';
+          return '<figure class="work-item" role="button" tabindex="0"><img src="' + src.replace(/"/g, '&quot;') + '" alt="' + alt.replace(/"/g, '&quot;') + '" loading="lazy"></figure>';
         }).join('');
       }
 
@@ -1523,6 +1750,11 @@
       var nav = document.getElementById('main-nav');
       function onScroll() {
         if (nav) nav.classList.toggle('nav-scrolled', window.scrollY > 20);
+        /* 移动端 swipe 模式下，Art/Design/Tool 不通过 scroll 更新 nav-bg，避免与 setNavActive 冲突导致 tab 表现不一致 */
+        if (document.body.classList.contains('swipe-mode')) {
+          var tab = document.body.getAttribute('data-tab') || '';
+          if (tab === 'projects' || tab === 'article' || tab === 'ai') return;
+        }
         updateNavBgByScroll();
       }
       window.addEventListener('scroll', onScroll);
@@ -1713,7 +1945,7 @@
         var item = map[id];
         var src = (item && item.dataUrl) ? item.dataUrl : '';
         if (forDisplay && !src) return '<span class="article-missing-img">[图片缺失]</span>';
-        return '<img' + pre + mid + ' src="' + src.replace(/"/g, '&quot;') + '"' + post + '>';
+        return '<img' + pre + mid + ' src="' + src.replace(/"/g, '&quot;') + '" loading="lazy"' + post + '>';
       }
       function replaceOneVideo(_, pre, id, mid, post, map, forDisplay) {
         var item = map[id];
@@ -1797,6 +2029,7 @@
           if (num.length < 2) num = '0' + num;
           var total = (ARTICLE_LIST.length).toString();
           if (total.length < 2) total = '0' + total;
+          var mobileImg = 'article/m_article_' + (i + 1) + '.jpg';
           return '<li class="article-item">' +
             '<div class="article-item-inner">' +
             '<a href="#article/' + id + '" class="article-item-link">' +
@@ -1813,8 +2046,10 @@
             '<span class="article-item-cta">查看详情</span>' +
             '</div></div>' +
             '<div class="article-item-right">' +
-            '<div class="article-item-thumb"><img src="' + (a.thumb || '').replace(/"/g, '&quot;') + '" alt="' + alt + '"></div>' +
-            '</div></div></a></div></li>';
+            '<div class="article-item-thumb"><img src="' + (a.thumb || '').replace(/"/g, '&quot;') + '" alt="' + alt + '" loading="lazy"></div>' +
+            '</div>' +
+            '<div class="article-item-mobile-img"><img src="' + mobileImg + '" alt="" loading="lazy"></div>' +
+            '</div></a></div></li>';
         }).join('');
         if (articleListWrap) articleListWrap.classList.add('article-list-view');
       }
@@ -1842,7 +2077,7 @@
             '<span class="article-item-tag-sep">|</span>' +
             '<span class="article-item-tag-cat">开源插件</span>' +
             '</span>' +
-            '<img src="AI/icon128.png" alt="" class="article-item-ai-icon">' +
+            '<img src="AI/icon128.png" alt="" class="article-item-ai-icon" loading="lazy">' +
             '</div>' +
             '<div class="article-item-content">' +
             '<h3 class="article-item-title">' + title + '</h3>' +
@@ -1930,22 +2165,34 @@
         }
         document.body.setAttribute('data-tab', key);
         setNavActive(key);
+        if (!document.body.classList.contains('swipe-mode')) {
+          window.scrollTo(0, 0);
+        }
+        var pageKey = (key === 'home') ? 'hero' : key;
+        resetPageScrollToTop(pageKey);
       }
 
       var navBgByKey = { hero: 'dark', projects: 'white', ai: 'white', article: 'white', about: 'dark' };
 
       function setNavActive(key) {
-        document.querySelectorAll('#main-nav a[href^="#"]').forEach(function (a) {
-          var href = (a.getAttribute('href') || '').replace('#', '');
-          var isActive = (key === 'hero') ? (href === 'hero' || href === '') : (href === key);
-          a.classList.toggle('nav-active', isActive);
+        var navKey = (key === 'home') ? 'hero' : key;
+        var navLinks = document.querySelectorAll('#main-nav a[href^="#"]');
+        navLinks.forEach(function (a) { a.classList.remove('nav-active'); });
+        navLinks.forEach(function (a) {
+          var href = (a.getAttribute('href') || '').replace('#', '').split('/')[0];
+          var isActive = (navKey === 'hero') ? (href === 'hero' || href === '') : (href === navKey);
+          if (isActive) a.classList.add('nav-active');
         });
-        if (key === 'about' || key === 'hero') {
+        if (key === 'about' || key === 'hero' || key === 'home') {
           updateNavBgByScroll();
         } else {
-          var bg = navBgByKey[key] || 'white';
+          var bg = navBgByKey[navKey] || 'white';
           document.body.classList.remove('nav-bg-dark', 'nav-bg-white');
           document.body.classList.add('nav-bg-' + bg);
+        }
+        if (document.body.classList.contains('swipe-mode')) {
+          var activeLink = document.querySelector('#main-nav a.nav-active');
+          if (activeLink) activeLink.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
         }
       }
 
@@ -1967,27 +2214,75 @@
         document.body.classList.add(useBlueText ? 'nav-bg-white' : 'nav-bg-dark');
       }
 
+      var tabOverlay = document.getElementById('tab-transition-overlay');
+      var TAB_TRANSITION_DURATION = 220;
+
+      function transitionToTab(targetHash, callback) {
+        targetHash = (targetHash === 'hero' || targetHash === '') ? '' : targetHash;
+        window.scrollTo(0, 0);
+        window.location.hash = targetHash || 'hero';
+        if (callback) callback();
+        /* PC 端不再使用 overlay 渐隐渐现，直接切换 */
+      }
+
+      var SWIPE_PAGE_IDS = ['hero', 'projects', 'article', 'ai', 'about'];
+      var swipeWrapperEl = null;
+      var swipeScrollListener = null;
+      var swipeUpdatingFromScroll = false;
+      var isClickingTab = false;
+
+      function resetPageScrollToTop(pageId) {
+        if (!pageId || pageId === 'hero') pageId = 'hero';
+        var page = document.getElementById(pageId);
+        if (page) page.scrollTop = 0;
+        if (pageId === 'article') {
+          var wrap = document.getElementById('article-list-wrap');
+          if (wrap) wrap.scrollTop = 0;
+        }
+        if (pageId === 'ai') {
+          var list = document.getElementById('ai-list');
+          if (list) list.scrollTop = 0;
+        }
+      }
+
       document.querySelectorAll('#main-nav a').forEach(function (a) {
         a.addEventListener('click', function (e) {
           var id = (a.getAttribute('href') || '').replace('#', '');
+          if (document.body.classList.contains('swipe-mode') && swipeWrapperEl) {
+            e.preventDefault();
+            if (!id || id === 'hero') id = 'hero';
+            var idx = SWIPE_PAGE_IDS.indexOf(id);
+            if (idx >= 0) {
+              isClickingTab = true;
+              resetPageScrollToTop(id);
+              setNavActive(id);
+              var pageWidth = swipeWrapperEl.getBoundingClientRect().width;
+              swipeWrapperEl.scrollTo({ left: idx * pageWidth, behavior: 'smooth' });
+              window.location.hash = (id === 'hero' ? '' : id);
+              setTimeout(function () { isClickingTab = false; }, 520);
+            }
+            return;
+          }
           if (!id || id === 'hero') {
             e.preventDefault();
-            showHome();
-            if (sections.hero) sections.hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            window.location.hash = '';
+            transitionToTab('', function () {
+              showHome();
+              if (sections.hero) sections.hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
             return;
           }
           if (['projects', 'ai', 'article', 'about'].indexOf(id) >= 0) {
             e.preventDefault();
-            showOnly(id);
-            var el = sections[id];
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            window.location.hash = id;
+            transitionToTab(id, function () {
+              var el = sections[id];
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
           }
         });
       });
 
       function syncTabFromHash() {
+        if (swipeUpdatingFromScroll) return;
         var hash = (window.location.hash || '').replace('#', '');
         if (hash === 'about') { showOnly('about'); }
         else if (hash === 'projects') { showOnly('projects'); }
@@ -2036,6 +2331,237 @@
       if (articleEditorCancel) articleEditorCancel.addEventListener('click', function (e) { e.preventDefault(); var h = (window.location.hash || '').replace('#', ''); if (h.indexOf('article/') === 0) { var r = h.slice(8), s = r.indexOf('/'); window.location.hash = 'article/' + (s >= 0 ? r.slice(0, s) : r); } else window.location.hash = 'article'; });
       syncTabFromHash();
       window.addEventListener('hashchange', syncTabFromHash);
+
+      (function initSwipeTabs() {
+        if (!('ontouchstart' in window)) return;
+        var TAB_HASHES = ['', 'projects', 'article', 'ai', 'about'];
+        var SWIPE_MIN = 60;
+        var startX = 0;
+        function getCurrentTabIndex() {
+          var hash = (window.location.hash || '').replace('#', '');
+          if (hash === '' || hash === 'hero') return 0;
+          if (hash === 'projects') return 1;
+          if (hash === 'article' || hash.indexOf('article/') === 0) return 2;
+          if (hash === 'ai') return 3;
+          if (hash === 'about') return 4;
+          return 0;
+        }
+        function goToTabIndex(index) {
+          var h = TAB_HASHES[index] || 'hero';
+          transitionToTab(h === 'hero' ? '' : h);
+        }
+        document.addEventListener('touchstart', function (e) {
+          if (e.touches.length) startX = e.touches[0].clientX;
+        }, { passive: true });
+        document.addEventListener('touchend', function (e) {
+          if (document.body.classList.contains('swipe-mode')) return;
+          if (!e.changedTouches || !e.changedTouches.length) return;
+          var endX = e.changedTouches[0].clientX;
+          var delta = endX - startX;
+          var cur = getCurrentTabIndex();
+          if (delta > SWIPE_MIN) {
+            var prev = cur - 1;
+            if (prev < 0) prev = TAB_HASHES.length - 1;
+            goToTabIndex(prev);
+          } else if (delta < -SWIPE_MIN) {
+            var next = (cur + 1) % TAB_HASHES.length;
+            goToTabIndex(next);
+          }
+        }, { passive: true });
+      })();
+
+      function enableSwipeMode() {
+        if (swipeWrapperEl) return;
+        var pageWrap = document.querySelector('.page-wrap');
+        var lightbox = document.getElementById('lightbox');
+        if (!pageWrap || !lightbox) return;
+        var hero = document.getElementById('hero');
+        var projects = document.getElementById('projects');
+        var article = document.getElementById('article');
+        var ai = document.getElementById('ai');
+        var about = document.getElementById('about');
+        if (!hero || !projects || !article || !ai || !about) return;
+        var wrapper = document.createElement('div');
+        wrapper.className = 'swipe-wrapper';
+        wrapper.appendChild(hero);
+        wrapper.appendChild(projects);
+        wrapper.appendChild(article);
+        wrapper.appendChild(ai);
+        wrapper.appendChild(about);
+        [hero, projects, article, ai, about].forEach(function (el) { el.classList.add('swipe-page'); });
+        pageWrap.insertBefore(wrapper, lightbox);
+        swipeWrapperEl = wrapper;
+
+        var SWIPE_DELTA_THRESHOLD = 50;
+        var SWIPE_DEBOUNCE_MS = 400;
+        var lastSwipeTime = 0;
+        var touchStartX = 0;
+        var touchStartY = 0;
+        var touchStartScroll = 0;
+        var touchStartIndex = 0;
+        var touchIsHorizontal = null;
+
+        function scrollToPage(index) {
+          if (!swipeWrapperEl) return;
+          var w = swipeWrapperEl.getBoundingClientRect().width;
+          index = Math.max(0, Math.min(index, SWIPE_PAGE_IDS.length - 1));
+          var key = SWIPE_PAGE_IDS[index];
+          resetPageScrollToTop(key);
+          swipeWrapperEl.scrollTo({ left: index * w, behavior: 'smooth' });
+          var tabKey = (key === 'hero') ? 'home' : key;
+          document.body.setAttribute('data-tab', tabKey);
+          setNavActive(key);
+          if (key === 'article') showArticleList();
+          if (key === 'ai') showAiList();
+          swipeUpdatingFromScroll = true;
+          window.location.hash = (key === 'hero' ? '' : key);
+          swipeUpdatingFromScroll = false;
+        }
+
+        var lastSwipePageIndex = -1;
+        function updateTabFromScroll() {
+          if (!swipeWrapperEl) return;
+          if (isClickingTab) return;
+          var w = swipeWrapperEl.getBoundingClientRect().width;
+          var scrollLeft = swipeWrapperEl.scrollLeft;
+          var maxScroll = Math.max(0, swipeWrapperEl.scrollWidth - w);
+          var index = scrollLeft <= 1 ? 0 : (scrollLeft >= maxScroll - 1 ? SWIPE_PAGE_IDS.length - 1 : Math.floor((scrollLeft + w * 0.5) / w));
+          index = Math.max(0, Math.min(index, SWIPE_PAGE_IDS.length - 1));
+          var key = SWIPE_PAGE_IDS[index];
+          if (index !== lastSwipePageIndex) {
+            resetPageScrollToTop(key);
+            lastSwipePageIndex = index;
+          }
+          var targetLeft = index * w;
+          if (Math.abs(swipeWrapperEl.scrollLeft - targetLeft) > 2) {
+            swipeWrapperEl.scrollTo({ left: targetLeft, behavior: 'smooth' });
+          }
+          var tabKey = (key === 'hero') ? 'home' : key;
+          document.body.setAttribute('data-tab', tabKey);
+          setNavActive(key);
+          if (key === 'article') showArticleList();
+          if (key === 'ai') showAiList();
+          swipeUpdatingFromScroll = true;
+          window.location.hash = (key === 'hero' ? '' : key);
+          swipeUpdatingFromScroll = false;
+        }
+
+        function onTouchStart(e) {
+          if (!e.touches || !e.touches.length) return;
+          if (Date.now() - lastSwipeTime < SWIPE_DEBOUNCE_MS) return;
+          var w = wrapper.getBoundingClientRect().width;
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          touchStartScroll = wrapper.scrollLeft;
+          touchStartIndex = Math.round(touchStartScroll / w);
+          touchStartIndex = Math.max(0, Math.min(touchStartIndex, SWIPE_PAGE_IDS.length - 1));
+          touchIsHorizontal = null;
+        }
+        function onTouchMove(e) {
+          if (!e.touches || !e.touches.length) return;
+          var deltaX = e.touches[0].clientX - touchStartX;
+          var deltaY = e.touches[0].clientY - touchStartY;
+          if (touchIsHorizontal === null) touchIsHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+          if (!touchIsHorizontal) return;
+          e.preventDefault();
+          var w = wrapper.getBoundingClientRect().width;
+          var targetScroll = touchStartScroll - deltaX;
+          var minScroll = Math.max(0, (touchStartIndex - 1) * w);
+          var maxScroll = Math.min(wrapper.scrollWidth - w, (touchStartIndex + 1) * w);
+          wrapper.scrollLeft = Math.max(minScroll, Math.min(maxScroll, targetScroll));
+        }
+        function onTouchEnd(e) {
+          if (!e.changedTouches || !e.changedTouches.length) return;
+          if (!touchIsHorizontal) return;
+          var endX = e.changedTouches[0].clientX;
+          var deltaX = endX - touchStartX;
+          var w = wrapper.getBoundingClientRect().width;
+          var threshold = Math.min(SWIPE_DELTA_THRESHOLD, w * 0.2);
+          var targetIndex = touchStartIndex;
+          if (deltaX > threshold) targetIndex = touchStartIndex - 1;
+          else if (deltaX < -threshold) targetIndex = touchStartIndex + 1;
+          scrollToPage(targetIndex);
+          lastSwipeTime = Date.now();
+        }
+
+        wrapper._swipeHandlers = { onTouchStart: onTouchStart, onTouchMove: onTouchMove, onTouchEnd: onTouchEnd };
+        wrapper.addEventListener('touchstart', onTouchStart, { passive: true });
+        wrapper.addEventListener('touchmove', onTouchMove, { passive: false });
+        wrapper.addEventListener('touchend', onTouchEnd, { passive: true });
+
+        function onWheel(e) {
+          if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+          e.preventDefault();
+          var w = wrapper.getBoundingClientRect().width;
+          if (Date.now() - lastSwipeTime < SWIPE_DEBOUNCE_MS) return;
+          var curIndex = Math.round(wrapper.scrollLeft / w);
+          curIndex = Math.max(0, Math.min(curIndex, SWIPE_PAGE_IDS.length - 1));
+          var threshold = 10;
+          if (e.deltaX > threshold) curIndex = Math.max(0, curIndex - 1);
+          else if (e.deltaX < -threshold) curIndex = Math.min(SWIPE_PAGE_IDS.length - 1, curIndex + 1);
+          scrollToPage(curIndex);
+          lastSwipeTime = Date.now();
+        }
+        wrapper._swipeHandlers.onWheel = onWheel;
+        wrapper.addEventListener('wheel', onWheel, { passive: false });
+
+        var scrollEndTimer = null;
+        swipeScrollListener = function () {
+          if (scrollEndTimer) clearTimeout(scrollEndTimer);
+          scrollEndTimer = setTimeout(updateTabFromScroll, 200);
+        };
+        wrapper.addEventListener('scroll', swipeScrollListener, { passive: true });
+        document.body.classList.add('swipe-mode');
+        var hash = (window.location.hash || '').replace('#', '');
+        if (hash.indexOf('article/') === 0) hash = 'article';
+        if (!hash || hash === 'hero') hash = 'hero';
+        var idx = SWIPE_PAGE_IDS.indexOf(hash);
+        if (idx >= 0) {
+          var pw = wrapper.getBoundingClientRect().width;
+          wrapper.scrollTo({ left: idx * pw, behavior: 'auto' });
+        }
+        updateTabFromScroll();
+      }
+
+      function disableSwipeMode() {
+        if (!swipeWrapperEl) return;
+        var pageWrap = document.querySelector('.page-wrap');
+        var lightbox = document.getElementById('lightbox');
+        if (!pageWrap || !lightbox) return;
+        var wrapper = swipeWrapperEl;
+        if (swipeScrollListener) {
+          wrapper.removeEventListener('scroll', swipeScrollListener);
+          swipeScrollListener = null;
+        }
+        if (wrapper._swipeHandlers) {
+          wrapper.removeEventListener('touchstart', wrapper._swipeHandlers.onTouchStart);
+          wrapper.removeEventListener('touchmove', wrapper._swipeHandlers.onTouchMove);
+          wrapper.removeEventListener('touchend', wrapper._swipeHandlers.onTouchEnd);
+          wrapper.removeEventListener('wheel', wrapper._swipeHandlers.onWheel);
+          delete wrapper._swipeHandlers;
+        }
+        var hero = document.getElementById('hero');
+        var projects = document.getElementById('projects');
+        var article = document.getElementById('article');
+        var ai = document.getElementById('ai');
+        var about = document.getElementById('about');
+        [hero, projects, article, ai, about].forEach(function (el) { if (el) el.classList.remove('swipe-page'); });
+        pageWrap.insertBefore(article, lightbox);
+        pageWrap.insertBefore(ai, lightbox);
+        pageWrap.insertBefore(projects, lightbox);
+        pageWrap.insertBefore(hero, lightbox);
+        pageWrap.appendChild(about);
+        wrapper.parentNode.removeChild(wrapper);
+        swipeWrapperEl = null;
+        document.body.classList.remove('swipe-mode');
+      }
+
+      if (window.innerWidth < 768) enableSwipeMode();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth < 768 && !swipeWrapperEl) enableSwipeMode();
+        else if (window.innerWidth >= 768 && swipeWrapperEl) disableSwipeMode();
+      });
+
       onScroll();
       var heroWrap = document.getElementById('hero-card-wrap');
       var peekButtons = heroWrap ? heroWrap.querySelectorAll('.peek-card') : [];
@@ -2138,7 +2664,7 @@
 
   <section id="about">
     <div class="section-inner">
-      <img src="avatar1.png" alt="Afu" class="about-avatar">
+      <img src="avatar1.png" alt="Afu" class="about-avatar" loading="lazy">
       <div class="about-content">
         <p>Afu (Zhang Huafeng) | Senior Visual Designer & Design Manager</p>
         <p>Over 10 years of end-to-end design experience, formerly at Huawei and Tencent. Led visual upgrades and brand design for core products including Tencent Browser, Weishi, and Tencent Cloud official site; deeply involved in interaction and product modules, with full-cycle capability from visual execution to design management.</p>
