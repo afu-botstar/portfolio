@@ -43,7 +43,9 @@
       --radius-lg: 24px;
       --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
       --shadow-hover: 0 12px 28px rgba(249, 115, 22, 0.12);
-      --font: 'Kaisei Decol', SimHei, 'Microsoft YaHei', sans-serif;
+      /* 英文用上传的 Kaisei Decol（unicode-range 限定拉丁字符），中文用苹方或系统默认 */
+      --font: 'Kaisei Decol', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+      --font-mobile: 'Kaisei Decol', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
       /* 统一 Art / Design / AI 三个模块内容区到 tab 的顶部间距 */
       --tab-to-content: clamp(6rem, 12vw, 9rem);
     }
@@ -72,6 +74,8 @@
       overflow-x: hidden;
       display: flex;
       flex-direction: column;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
     }
 
     .page-wrap {
@@ -823,6 +827,9 @@
       margin-bottom: 0.5rem;
       color: #000;
       line-height: 1.2;
+      word-break: normal;
+      overflow-wrap: break-word;
+      overflow: visible;
     }
     .article-detail-image-wrap {
       margin-top: 1.5rem;
@@ -851,9 +858,13 @@
         min-width: 0;
       }
       #article .article-item-title,
-      #article .article-item-excerpt {
+      #article .article-item-excerpt,
+      #ai .article-item-title,
+      #ai .article-item-excerpt {
         word-break: normal;
         overflow-wrap: break-word;
+        overflow: visible;
+        max-width: 100%;
       }
       #article .article-item,
       #ai .article-item {
@@ -1178,6 +1189,11 @@
         --tab-to-content: 5rem;
       }
     }
+    @media (max-width: 767px) {
+      body, nav, .article-item-title, .article-item-excerpt, .article-item-cta, .article-item-tag, .article-detail-title, .hero .tagline, #about .about-content, footer, .section-inner h2 {
+        font-family: var(--font-mobile);
+      }
+    }
     @media (max-width: 640px) {
       :root {
         --tab-to-content: 6rem;
@@ -1496,6 +1512,7 @@
         }
         var moveFactorBg = 0.008;
         var moveFactorChar = 0.015;
+        if ('ontouchstart' in window) return;
         document.addEventListener('mousemove', function (e) {
           var centerX = window.innerWidth / 2;
           var centerY = window.innerHeight / 2;
@@ -1638,16 +1655,20 @@
       }
 
       var nav = document.getElementById('main-nav');
+      var scrollRaf = null;
       function onScroll() {
-        if (nav) nav.classList.toggle('nav-scrolled', window.scrollY > 20);
-        /* 移动端 swipe 模式下，Art/Design/Tool 不通过 scroll 更新 nav-bg，避免与 setNavActive 冲突导致 tab 表现不一致 */
-        if (document.body.classList.contains('swipe-mode')) {
-          var tab = document.body.getAttribute('data-tab') || '';
-          if (tab === 'projects' || tab === 'article' || tab === 'ai') return;
-        }
-        updateNavBgByScroll();
+        if (scrollRaf) return;
+        scrollRaf = requestAnimationFrame(function () {
+          scrollRaf = null;
+          if (nav) nav.classList.toggle('nav-scrolled', window.scrollY > 20);
+          if (document.body.classList.contains('swipe-mode')) {
+            var tab = document.body.getAttribute('data-tab') || '';
+            if (tab === 'projects' || tab === 'article' || tab === 'ai') return;
+          }
+          updateNavBgByScroll();
+        });
       }
-      window.addEventListener('scroll', onScroll);
+      window.addEventListener('scroll', onScroll, { passive: true });
 
       var sections = {
         hero: document.getElementById('hero'),
@@ -1764,7 +1785,7 @@
           if (articleDetailTitle) articleDetailTitle.textContent = a.title || '';
           var imgSrc = a.image || a.thumb || '';
           if (articleDetailImageWrap) {
-            articleDetailImageWrap.innerHTML = imgSrc ? '<img src="' + imgSrc.replace(/"/g, '&quot;') + '" alt="">' : '';
+            articleDetailImageWrap.innerHTML = imgSrc ? '<img src="' + imgSrc.replace(/"/g, '&quot;') + '" alt="" loading="lazy" decoding="async">' : '';
           }
         }
         if (sections.article) sections.article.scrollIntoView({ behavior: 'smooth', block: 'start' });
