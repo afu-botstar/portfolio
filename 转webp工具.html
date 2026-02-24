@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PNG/JPG 转 WebP（无需安装）</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: "Microsoft YaHei", sans-serif; max-width: 520px; margin: 40px auto; padding: 0 20px; }
+    h1 { font-size: 1.25rem; margin-bottom: 8px; }
+    p { color: #666; font-size: 14px; margin: 0 0 20px; }
+    .zone {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      background: #fafafa;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+    .zone:hover, .zone.dragover { border-color: #06c; background: #f0f7ff; }
+    .zone input { display: none; }
+    .zone span { color: #06c; }
+    .list { margin: 12px 0; text-align: left; font-size: 13px; color: #333; max-height: 200px; overflow-y: auto; }
+    .list div { padding: 4px 0; }
+    .btn { background: #06c; color: #fff; border: none; padding: 10px 24px; border-radius: 6px; font-size: 14px; cursor: pointer; }
+    .btn:hover { background: #05a; }
+    .btn:disabled { background: #999; cursor: not-allowed; }
+    .log { margin-top: 16px; font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>PNG / JPG → WebP 转换</h1>
+  <p>不用装 Python，用浏览器即可。请用 <strong>Chrome 或 Edge</strong> 打开本页面。</p>
+
+  <div class="zone" id="zone">
+    <input type="file" id="input" accept="image/png,image/jpeg,image/jpg" multiple>
+    <span>点击或把图片拖到这里</span>
+  </div>
+
+  <div class="list" id="list"></div>
+  <button class="btn" id="btn" disabled>全部转为 WebP 并下载</button>
+  <div class="log" id="log"></div>
+
+  <script>
+    var zone = document.getElementById('zone');
+    var input = document.getElementById('input');
+    var list = document.getElementById('list');
+    var btn = document.getElementById('btn');
+    var log = document.getElementById('log');
+    var files = [];
+
+    zone.onclick = function () { input.click(); };
+    zone.ondragover = function (e) { e.preventDefault(); zone.classList.add('dragover'); };
+    zone.ondragleave = function () { zone.classList.remove('dragover'); };
+    zone.ondrop = function (e) {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      addFiles(e.dataTransfer.files);
+    };
+    input.onchange = function () { addFiles(input.files); input.value = ''; };
+
+    function addFiles(fs) {
+      for (var i = 0; i < fs.length; i++) {
+        var f = fs[i];
+        if (!f.type.match(/^image\/(png|jpeg|jpg)$/)) continue;
+        files.push(f);
+      }
+      renderList();
+      btn.disabled = files.length === 0;
+    }
+
+    function renderList() {
+      list.innerHTML = files.map(function (f) { return '<div>' + f.name + '</div>'; }).join('');
+    }
+
+    function toWebPName(name) {
+      return name.replace(/\.(png|jpe?g)$/i, '.webp');
+    }
+
+    function downloadBlob(blob, name) {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    btn.onclick = function () {
+      if (files.length === 0) return;
+      btn.disabled = true;
+      log.textContent = '正在转换…';
+      var done = 0;
+      var total = files.length;
+
+      function next(i) {
+        if (i >= total) {
+          log.textContent = '已全部下载完成，请把下载的 .webp 文件放到网站对应文件夹里（替换或与说明一致）。';
+          btn.disabled = false;
+          files = [];
+          renderList();
+          return;
+        }
+        var f = files[i];
+        var img = new Image();
+        img.onload = function () {
+          var c = document.createElement('canvas');
+          c.width = img.width;
+          c.height = img.height;
+          var ctx = c.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          c.toBlob(function (blob) {
+            if (blob) downloadBlob(blob, toWebPName(f.name));
+            done++;
+            log.textContent = '已转换 ' + done + ' / ' + total + ' …';
+            next(i + 1);
+          }, 'image/webp', 0.85);
+        };
+        img.onerror = function () { next(i + 1); };
+        img.src = URL.createObjectURL(f);
+      }
+      next(0);
+    };
+  </script>
+</body>
+</html>

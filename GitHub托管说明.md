@@ -19,8 +19,8 @@
 - `index.html`（必须）
 - `front/` 文件夹（3 个字体文件）
 - `article/` 文件夹（Design 页的封面和正文图）
-- `AI/` 文件夹（Tool 页图标 `icon128.png`）
-- 根目录图片：`bg-card.png`、`home-me_1.png`～`home-me_6.png`、`avatar1.png`、所有 `work*.jpg`、`jike.png`、`wechat.png`、`xiaohongshu.png`
+- `AI/` 文件夹（Tool 页图标 `icon128.webp`）
+- 根目录图片：`bg-card.webp`、`home-me_1.webp`～`home-me_6.webp`、`avatar1.webp`、所有 `work*.webp`、`jike.webp`、`wechat.webp`、`xiaohongshu.webp`
 
 少哪个，线上对应位置就会裂图或缺样式。
 
@@ -174,7 +174,7 @@ git push
 
 - 说明引用路径和仓库里的文件不一致。  
 - 检查：仓库里的文件夹名、文件名是否和 `index.html` 里写的一致（大小写、空格、中文都要一致）。  
-- 图片路径是相对路径，例如 `article/article_1.png`，表示根目录下的 `article` 文件夹里的 `article_1.png`。
+- 图片路径是相对路径，例如 `article/article_1.webp`，表示根目录下的 `article` 文件夹里的 `article_1.webp`。
 
 ### 5. 想用自己买的域名
 
