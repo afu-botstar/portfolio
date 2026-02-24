@@ -194,3 +194,30 @@ git push
 6. 以后改完代码就：`git add .` → `git commit -m "更新说明"` → `git push`。
 
 按这个流程做一遍，你的网站就会稳定挂在 GitHub 上，并且可以随时用 `git push` 更新。
+
+---
+
+## 九、加载更快 + 给国内面试官的访问建议
+
+### 已做的加载优化
+
+- 图片已改为 WebP，体积更小。
+- 首屏两张图（`bg-card.webp`、`home-me_1.webp`）已做 **preload** 和 **fetchpriority="high"**，首屏会更快。
+- 其余图片使用 `loading="lazy"`，滚动到时再加载。
+
+### 若发给国内面试官：建议多一个国内可访问的链接
+
+- **GitHub / GitHub Pages** 在国内有时较慢或被限制，面试官可能打不开或等很久。
+- **建议**：同一份项目再部署一份到国内或国际 CDN，发简历时给两个链接：
+  - **主链接（国内优先）**：下面任选一个，国内访问通常更稳定。
+  - **备用链接**：`https://你的用户名.github.io/portfolio/`（GitHub Pages）。
+
+**国内 / 国际访问都较稳的免费部署方式：**
+
+| 方式 | 说明 | 国内访问 |
+|------|------|----------|
+| **Gitee 码云 Pages** | 和 GitHub 类似，把仓库推到 Gitee，开启 Gitee Pages | 一般较快 |
+| **Vercel** | 用 GitHub 仓库一键导入，自动部署，带 CDN | 多数情况可用 |
+| **Netlify** | 同上，连 GitHub 后自动部署 | 多数情况可用 |
+
+发简历时可以写：「作品集：https://xxx（主链接），备用：https://用户名.github.io/portfolio/」。

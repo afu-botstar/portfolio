@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfolio</title>
+  <!-- 首屏关键图提前加载，缩短首次渲染时间 -->
+  <link rel="preload" as="image" href="bg-card.webp">
+  <link rel="preload" as="image" href="home-me_1.webp">
   <style>
     :root {
       --bg: linear-gradient(180deg, #e8f4fd 0%, #f5f9fc 35%, #fff8f0 70%, #fef5eb 100%);
@@ -1461,8 +1464,8 @@
         <span class="hero-name hero-name-left">AFU</span>
         <div class="hero-card-wrap" id="hero-card-wrap">
           <div class="parallax-container hero-illustration" id="hero-parallax">
-            <img class="layer-bg" src="bg-card.webp" alt="">
-            <img class="layer-character" src="home-me_1.webp" alt="Afu">
+            <img class="layer-bg" src="bg-card.webp" alt="" fetchpriority="high" decoding="async">
+            <img class="layer-character" src="home-me_1.webp" alt="Afu" fetchpriority="high" decoding="async">
           </div>
         </div>
         <span class="hero-name hero-name-right">ZHANG</span>
