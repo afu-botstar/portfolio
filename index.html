@@ -7,6 +7,8 @@
   <!-- 首屏关键图提前加载，缩短首次渲染时间 -->
   <link rel="preload" as="image" href="bg-card.webp">
   <link rel="preload" as="image" href="home-me_1.webp">
+  <!-- 移动端点击 WeChat 会显示该图，预加载以提升首次打开速度 -->
+  <link rel="preload" as="image" href="wechat.webp" media="(max-width: 767px)">
   <style>
     :root {
       --bg: linear-gradient(180deg, #e8f4fd 0%, #f5f9fc 35%, #fff8f0 70%, #fef5eb 100%);
@@ -264,6 +266,141 @@
     }
     .parallax-container .layer-bg { z-index: 0; }
     .parallax-container .layer-character { z-index: 1; }
+
+    /* 图片未加载时的纯色占位 */
+    .img-placeholder-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .img-placeholder-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: #e0eef6;
+    }
+    .img-placeholder-wrap img {
+      position: relative;
+      z-index: 1;
+    }
+    .img-placeholder-wrap.loaded::before {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .parallax-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: #e0eef6;
+    }
+    .parallax-container.loaded::before {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .work-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: #e0eef6;
+    }
+    .work-item img {
+      position: relative;
+      z-index: 1;
+    }
+    .work-item.loaded::before {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .article-item-thumb::before,
+    .article-item-mobile-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: #e0eef6;
+    }
+    .article-item-mobile-img {
+      position: relative;
+    }
+    .article-item-thumb img,
+    .article-item-mobile-img img {
+      position: relative;
+      z-index: 1;
+    }
+    .article-item-thumb.loaded::before,
+    .article-item-mobile-img.loaded::before {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .lightbox-placeholder {
+      display: none;
+      position: absolute;
+      inset: 2rem;
+      max-width: 80vw;
+      max-height: 80vh;
+      margin: auto;
+      background: #e0eef6;
+      border-radius: 4px;
+    }
+    .lightbox.is-open .lightbox-placeholder {
+      display: block;
+    }
+    .lightbox.is-open.loaded .lightbox-placeholder {
+      display: none;
+    }
+    .about-avatar-wrap {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+    }
+    .about-avatar-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: #e0eef6;
+    }
+    .about-avatar-wrap .about-avatar {
+      position: relative;
+      z-index: 1;
+    }
+    .about-avatar-wrap.loaded::before {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .about-hover-preview.img-placeholder-wrap::before {
+      background: #e0eef6;
+    }
+    .about-hover-preview.loaded::before {
+      opacity: 0;
+    }
+    #article-detail-image-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    #article-detail-image-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: #e0eef6;
+    }
+    #article-detail-image-wrap.loaded::before {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #article-detail-image-wrap img {
+      position: relative;
+      z-index: 1;
+    }
 
     .hero-peek-stack {
       position: absolute;
@@ -1297,7 +1434,7 @@
       nav .nav-inner { padding: 0.5rem 1rem; }
       nav ul { gap: clamp(0.5rem, 2vw, 1rem); flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
       nav ul::-webkit-scrollbar { display: none; }
-      nav a { padding: 0.4rem 0.5rem; min-height: 36px; min-width: 36px; line-height: 1.2; margin: 0; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem; }
+      nav a { padding: 0.4rem 0.5rem; min-height: 44px; min-width: 44px; line-height: 1.2; margin: 0; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem; }
       /* About 移动端：缩小文字、与顶部 tab 留足间距 */
       #about {
         font-size: 1rem;
@@ -1447,7 +1584,7 @@
         top: auto !important;
       }
       #main-nav ul { flex-wrap: nowrap; gap: 0.35rem 0.75rem; }
-      #main-nav a { padding: 0.35rem 0.45rem; min-height: 34px; min-width: 34px; line-height: 1.2; font-size: 0.875rem; }
+      #main-nav a { padding: 0.35rem 0.5rem; min-height: 44px; min-width: 44px; line-height: 1.2; font-size: 0.875rem; }
       /* 隐藏 footer，让 swipe 区域占满视口，首页渐变全屏 */
       body.swipe-mode footer {
         display: none;
@@ -1545,7 +1682,7 @@
       <span class="about-link-btn" style="cursor: default;" data-hover-img="wechat.webp"><span>👋</span><span>WeChat</span></span>
       <a href="https://web.okjike.com" target="_blank" rel="noopener" class="about-link-btn hero-link-jike" data-hover-img="jike.webp"><span>👋</span><span>即刻</span></a>
     </div>
-    <div class="about-hover-preview" id="about-hover-preview" aria-hidden="true"><img src="" alt=""></div>
+    <div class="about-hover-preview img-placeholder-wrap" id="about-hover-preview" aria-hidden="true"><img src="" alt=""></div>
   </section>
 
   <section id="projects">
@@ -1585,6 +1722,7 @@
   </section>
 
   <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-placeholder" aria-hidden="true"></div>
     <button type="button" class="lightbox-close" aria-label="Close">×</button>
     <img src="" alt="">
   </div>
@@ -1601,6 +1739,12 @@
         if (HERO_CHAR_IMAGES.length) {
           layerChar.src = HERO_CHAR_IMAGES[Math.floor(Math.random() * HERO_CHAR_IMAGES.length)];
         }
+        var markLoaded = function () {
+          if (layerBg.complete && layerChar.complete) container.classList.add('loaded');
+        };
+        layerBg.addEventListener('load', markLoaded);
+        layerChar.addEventListener('load', markLoaded);
+        markLoaded();
         var moveFactorBg = 0.008;
         var moveFactorChar = 0.015;
         var moveFactorY = 0.35;
@@ -1699,38 +1843,50 @@
           var alt = 'Work ' + (i + 1);
           return '<figure class="work-item" role="button" tabindex="0"><img src="' + src.replace(/"/g, '&quot;') + '" alt="' + alt.replace(/"/g, '&quot;') + '" loading="lazy"></figure>';
         }).join('');
+        galleryEl.querySelectorAll('.work-item').forEach(function (item) {
+          var img = item.querySelector('img');
+          if (img) {
+            img.addEventListener('load', function () { item.classList.add('loaded'); });
+            if (img.complete) item.classList.add('loaded');
+          }
+        });
       }
 
       var lightbox = document.getElementById('lightbox');
-      var lbImg = lightbox.querySelector('img');
-      var lbClose = lightbox.querySelector('.lightbox-close');
+      var lbImg = lightbox ? lightbox.querySelector('img') : null;
+      var lbClose = lightbox ? lightbox.querySelector('.lightbox-close') : null;
 
       function openLightbox(src, alt) {
+        if (!lightbox || !lbImg) return;
+        lightbox.classList.remove('loaded');
+        lbImg.onload = function () { lightbox.classList.add('loaded'); };
         lbImg.src = src;
         lbImg.alt = alt || '';
         lightbox.classList.add('is-open');
         lightbox.setAttribute('aria-hidden', 'false');
+        if (lbImg.complete) lightbox.classList.add('loaded');
       }
 
       document.querySelectorAll('.work-item').forEach(function (item) {
         item.addEventListener('click', function () {
           var img = this.querySelector('img');
-          openLightbox(img.src, img.alt);
+          if (img && lightbox && lbImg) openLightbox(img.src, img.alt);
         });
         item.addEventListener('keydown', function (e) {
           if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
         });
       });
       function closeLightbox() {
+        if (!lightbox) return;
         lightbox.classList.remove('is-open');
         lightbox.setAttribute('aria-hidden', 'true');
       }
-      lbClose.addEventListener('click', closeLightbox);
-      lightbox.addEventListener('click', function (e) {
+      if (lbClose) lbClose.addEventListener('click', closeLightbox);
+      if (lightbox) lightbox.addEventListener('click', function (e) {
         if (e.target === lightbox) closeLightbox();
       });
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+        if (e.key === 'Escape' && lightbox && lightbox.classList.contains('is-open')) closeLightbox();
       });
 
       var hoverPreview = document.getElementById('about-hover-preview');
@@ -1740,9 +1896,13 @@
           var src = btn.getAttribute('data-hover-img');
           if (!src) return;
           btn.addEventListener('mouseenter', function () {
+            hoverPreview.classList.remove('loaded');
             hoverPreviewImg.src = src;
+            hoverPreviewImg.alt = src.indexOf('wechat') !== -1 ? 'WeChat' : 'Preview';
             hoverPreview.setAttribute('aria-hidden', 'false');
             hoverPreview.classList.add('is-visible');
+            hoverPreviewImg.onload = function () { hoverPreview.classList.add('loaded'); };
+            if (hoverPreviewImg.complete) hoverPreview.classList.add('loaded');
             var rect = btn.getBoundingClientRect();
             var x = rect.left + rect.width / 2 - 100;
             var y = Math.max(10, rect.top - 220);
@@ -1763,9 +1923,13 @@
               hoverPreview.setAttribute('aria-hidden', 'true');
               return;
             }
+            hoverPreview.classList.remove('loaded');
             hoverPreviewImg.src = src;
+            hoverPreviewImg.alt = src.indexOf('wechat') !== -1 ? 'WeChat' : 'Preview';
             hoverPreview.setAttribute('aria-hidden', 'false');
             hoverPreview.classList.add('is-visible');
+            hoverPreviewImg.onload = function () { hoverPreview.classList.add('loaded'); };
+            if (hoverPreviewImg.complete) hoverPreview.classList.add('loaded');
             var rect = btn.getBoundingClientRect();
             var x = rect.left + rect.width / 2 - 100;
             var y = Math.max(10, rect.top - 220);
@@ -1783,6 +1947,15 @@
           hoverPreview.classList.remove('is-visible');
           hoverPreview.setAttribute('aria-hidden', 'true');
         });
+      }
+
+      var avatarWrap = document.querySelector('.about-avatar-wrap');
+      if (avatarWrap) {
+        var avImg = avatarWrap.querySelector('.about-avatar');
+        if (avImg) {
+          avImg.addEventListener('load', function () { avatarWrap.classList.add('loaded'); });
+          if (avImg.complete) avatarWrap.classList.add('loaded');
+        }
       }
 
       var nav = document.getElementById('main-nav');
@@ -1858,6 +2031,13 @@
             '</div></a></div></li>';
         }).join('');
         if (articleListWrap) articleListWrap.classList.add('article-list-view');
+        articleListEl.querySelectorAll('.article-item-thumb, .article-item-mobile-img').forEach(function (wrap) {
+          var img = wrap.querySelector('img');
+          if (img) {
+            img.addEventListener('load', function () { wrap.classList.add('loaded'); });
+            if (img.complete) wrap.classList.add('loaded');
+          }
+        });
       }
 
       function renderAiList() {
@@ -1934,7 +2114,15 @@
           }
           var imgSrc = a.image || a.thumb || '';
           if (articleDetailImageWrap) {
+            articleDetailImageWrap.classList.remove('loaded');
             articleDetailImageWrap.innerHTML = imgSrc ? '<img src="' + imgSrc.replace(/"/g, '&quot;') + '" alt="" loading="lazy" decoding="async">' : '';
+            if (imgSrc) {
+              var detailImg = articleDetailImageWrap.querySelector('img');
+              if (detailImg) {
+                detailImg.addEventListener('load', function () { articleDetailImageWrap.classList.add('loaded'); });
+                if (detailImg.complete) articleDetailImageWrap.classList.add('loaded');
+              }
+            }
           }
         }
         if (sections.article) sections.article.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2403,7 +2591,7 @@
 
   <section id="about">
     <div class="section-inner">
-      <img src="avatar1.webp" alt="Afu" class="about-avatar" loading="lazy">
+      <span class="about-avatar-wrap img-placeholder-wrap"><img src="avatar1.webp" alt="Afu" class="about-avatar" loading="lazy"></span>
       <div class="about-content">
         <p>Afu (Zhang Huafeng) | Senior Visual Designer & Design Manager</p>
         <p>Over 10 years of end-to-end design experience, formerly at Huawei and Tencent. Led visual upgrades and brand design for core products including Tencent Browser, Weishi, and Tencent Cloud official site; deeply involved in interaction and product modules, with full-cycle capability from visual execution to design management.</p>
