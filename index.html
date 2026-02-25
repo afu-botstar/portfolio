@@ -1841,13 +1841,24 @@
       if (galleryEl) {
         galleryEl.innerHTML = WORK_IMAGES.map(function (src, i) {
           var alt = 'Work ' + (i + 1);
-          return '<figure class="work-item" role="button" tabindex="0"><img src="' + src.replace(/"/g, '&quot;') + '" alt="' + alt.replace(/"/g, '&quot;') + '" loading="lazy"></figure>';
+          var loading = i < 6 ? 'eager' : 'lazy';
+          return '<figure class="work-item" role="button" tabindex="0"><img src="' + src.replace(/"/g, '&quot;') + '" alt="' + alt.replace(/"/g, '&quot;') + '" loading="' + loading + '" decoding="async"></figure>';
         }).join('');
         galleryEl.querySelectorAll('.work-item').forEach(function (item) {
           var img = item.querySelector('img');
           if (img) {
-            img.addEventListener('load', function () { item.classList.add('loaded'); });
-            if (img.complete) item.classList.add('loaded');
+            function markLoaded() {
+              if (item.classList.contains('loaded')) return;
+              item.classList.add('loaded');
+            }
+            img.addEventListener('load', function () {
+              if (img.decode) {
+                img.decode().then(markLoaded).catch(markLoaded);
+              } else {
+                markLoaded();
+              }
+            });
+            if (img.complete && img.naturalWidth > 0) markLoaded();
           }
         });
       }
@@ -2536,7 +2547,6 @@
           if (imgEl) imgEl.alt = 'Work preview';
           btn.dataset.src = src;
           btn.classList.remove('peek-loaded');
-          btn.style.backgroundImage = '';
           var loader = new Image();
           loader.onload = function () {
             btn.style.backgroundImage = 'url("' + src.replace(/"/g, '%22') + '")';
@@ -2548,16 +2558,9 @@
       }
 
       applyPeekImages();
-      setTimeout(applyPeekImages, 300);
       if (heroWrap) {
         var firstHoverLeaveDone = false;
-        var firstHoverEnterDone = false;
         heroWrap.addEventListener('mouseenter', function () {
-          if (!firstHoverEnterDone) {
-            firstHoverEnterDone = true;
-          } else {
-            applyPeekImages();
-          }
           heroWrap.classList.add('is-peeking');
         });
         heroWrap.addEventListener('mouseleave', function () {
