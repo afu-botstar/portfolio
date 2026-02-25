@@ -29,6 +29,8 @@
       --font-mobile: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       /* 统一 Art / Design / AI 三个模块内容区到 tab 的顶部间距 */
       --tab-to-content: clamp(6rem, 12vw, 9rem);
+      /* Art / Design / Tool 三 tab 共用背景色 */
+      --tab-bg: #F2F2F7;
     }
 
     * {
@@ -626,9 +628,6 @@
     #projects {
       padding-top: calc(var(--tab-to-content) + 1rem);
     }
-    #projects .projects-list-wrap {
-      height: calc(100vh - var(--tab-to-content) - 1rem);
-    }
 
     section .section-inner {
       max-width: 1280px;
@@ -684,22 +683,38 @@
       padding-left: 0;
       padding-right: 0;
       padding-bottom: 0;
-      background: #F2F2F7;
+      background: var(--tab-bg);
     }
     #article.article-showing-list .section-inner {
       max-width: none;
       padding: 0;
     }
-    #ai.ai-showing-list {
-      padding-top: var(--tab-to-content);
-      padding-left: 0;
-      padding-right: 0;
-      padding-bottom: 0;
-      background: #F2F2F7;
+    /* Art 列表：仅整页滚动。section 与列表区均不设固定高度、不产生内部滚动（桌面端；移动端 swipe 保留 .swipe-page 的滚动） */
+    #article.article-showing-list:not(.swipe-page) {
+      height: auto;
+      max-height: none;
+      overflow: visible;
+    }
+    /* Art 的 .article-list-wrap 不依赖 article-list-view 类，直接按父级 #article.article-showing-list 生效 */
+    #article.article-showing-list .article-list-wrap,
+    #article.article-showing-list #article-list-wrap {
+      height: auto !important;
+      max-height: none !important;
+      min-height: calc(100vh - var(--tab-to-content));
+      overflow-y: visible !important;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: auto;
+    }
+    #article.article-showing-list .article-list,
+    #article .article-list {
+      overflow: visible;
     }
     #ai.ai-showing-list .section-inner {
       max-width: none;
       padding: 0;
+    }
+    #ai.ai-showing-list {
+      background: var(--tab-bg);
     }
     #ai .article-item-right {
       display: none;
@@ -707,19 +722,53 @@
     #ai .article-item-left {
       width: 100%;
     }
-    body.article-list-view,
     body.ai-list-view {
       overflow: hidden;
     }
-    html.article-list-view,
+    /* Art 列表时仅整页滚动，不锁 body */
+    body[data-tab="article"] {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    body[data-tab="projects"],
+    body[data-tab="ai"] {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    /* Design / Tool / Art 整页统一背景，避免 section 与 body 渐变形成两色 */
+    body[data-tab="projects"],
+    body[data-tab="ai"],
+    body[data-tab="article"] {
+      background: var(--tab-bg);
+    }
     html.ai-list-view {
       overflow: hidden;
     }
     body.ai-list-view footer {
       display: none;
     }
-    #ai-list-wrap.article-list-view {
-      height: calc(100vh - var(--tab-to-content));
+    /* Design / Tool 与 Art 统一：整页滚动，列表区不固定高度、不内部滚动 */
+    #ai-list-wrap {
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #ai-list-wrap .article-list {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 720px;
+      flex: none;
+      overflow: visible;
+    }
+    .projects-list-wrap {
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      overflow: visible;
     }
     .article-item-inner {
       width: 100%;
@@ -749,13 +798,12 @@
       box-sizing: border-box;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
-    #article .article-item-link:hover .article-item-card,
-    #ai .article-item-link:hover .article-item-card {
+    #article .article-item-link:hover .article-item-card {
       transform: translateY(-4px);
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
     }
     #article.article-view-detail {
-      background: #F2F2F7;
+      background: var(--tab-bg);
     }
     #article.article-view-detail .section-inner > h2 {
       display: none;
@@ -764,40 +812,6 @@
       padding-top: 80px;
     }
 
-    .article-list-wrap.article-list-view,
-    .projects-list-wrap {
-      width: 100%;
-      height: calc(100vh - var(--tab-to-content));
-      overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .projects-list-wrap::-webkit-scrollbar { display: none; }
-    #ai-list-wrap.article-list-view {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow: hidden;
-    }
-    #ai-list-wrap .article-list {
-      margin: 0 auto;
-      width: 100%;
-      max-width: 720px;
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    #ai-list-wrap .article-list::-webkit-scrollbar {
-      display: none;
-    }
-    .article-list-wrap.article-list-view::-webkit-scrollbar {
-      display: none;
-    }
     #ai-list-wrap .article-list-footer {
       flex-shrink: 0;
     }
@@ -819,8 +833,7 @@
       display: block;
       padding: 0;
       margin: 0;
-      /* 底部留白需足够大，滑到底时最后一张卡片能完全叠在上一张之上 */
-      padding-bottom: calc(100vh - var(--tab-to-content) - (100vh - var(--tab-to-content)) / 1.5);
+      padding-bottom: 1.5rem;
     }
     .article-item {
       position: sticky;
@@ -1282,7 +1295,7 @@
     }
 
     #projects {
-      background: #F2F2F7;
+      background: var(--tab-bg);
     }
     #projects h2,
     #ai h2,
@@ -1317,12 +1330,9 @@
       background: #f1f5f9;
       cursor: pointer;
       line-height: 0;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .work-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+      transition: opacity 0.25s ease;
+      content-visibility: auto;
+      contain: layout style;
     }
 
     .work-item img {
@@ -1330,6 +1340,12 @@
       height: 100%;
       display: block;
       object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .work-item.loaded img {
+      opacity: 1;
     }
 
     .lightbox {
@@ -1515,7 +1531,7 @@
       body.swipe-mode #ai,
       body.swipe-mode #article {
         --tab-to-content: 4rem !important;
-        background: #F2F2F7;
+        background: var(--tab-bg);
         padding: 0 !important;
       }
       body.swipe-mode #projects::before,
@@ -1530,9 +1546,7 @@
       body.swipe-mode #projects::before {
         height: 5rem;
       }
-      body.swipe-mode #projects .projects-list-wrap {
-        height: calc(100vh - 5rem);
-      }
+      /* Design 与 Art/Tool 统一：整页滚动，不固定列表高度 */
       /* section-inner：Design/Tool 无内边距；Art 左右留白放这里，不占 section */
       body.swipe-mode #projects .section-inner {
         max-width: none;
@@ -1562,15 +1576,16 @@
         max-width: 100%;
       }
       /* Tab 栏可横向滚动，点击时选中项滚动到视口中心 */
-      #main-nav { padding: 0.4rem 0.6rem; }
+      #main-nav { padding: 0.4rem 0.6rem; background: transparent !important; }
       #main-nav .nav-inner {
         padding: 0.45rem 0.85rem;
         overflow-x: auto;
         overflow-y: hidden;
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
+        border-radius: 30px;
       }
-      /* 移动端 swipe 模式：Art/Design/Tool 三块 Tab 视觉完全统一，半透明白底 + 蓝色高亮 */
+      /* 移动端 swipe 模式：Art/Design/Tool 三块 Tab 视觉完全统一，半透明白底 + 蓝色高亮，仅 .nav-inner 圆角背景 */
       body.swipe-mode[data-tab="projects"] #main-nav .nav-inner,
       body.swipe-mode[data-tab="article"] #main-nav .nav-inner,
       body.swipe-mode[data-tab="ai"] #main-nav .nav-inner {
@@ -1695,11 +1710,8 @@
 
   <section id="ai">
     <div class="section-inner">
-      <div class="article-list-wrap article-list-view" id="ai-list-wrap">
+      <div class="article-list-wrap" id="ai-list-wrap">
         <ul class="article-list" id="ai-list"></ul>
-        <div class="article-list-footer">
-          <p>© 2025 Afu · Portfolio</p>
-        </div>
       </div>
     </div>
   </section>
@@ -1708,9 +1720,6 @@
     <div class="section-inner">
       <div class="article-list-wrap" id="article-list-wrap">
         <ul class="article-list" id="article-list"></ul>
-        <div class="article-list-footer">
-          <p>© 2025 Afu · Portfolio</p>
-        </div>
       </div>
       <div class="article-detail-wrap" id="article-detail-wrap" aria-hidden="true">
         <a href="#article" class="article-detail-back" id="article-detail-back">← 返回列表</a>
@@ -1837,36 +1846,9 @@
         }
       ];
 
-      var galleryEl = document.getElementById('works-gallery');
-      if (galleryEl) {
-        galleryEl.innerHTML = WORK_IMAGES.map(function (src, i) {
-          var alt = 'Work ' + (i + 1);
-          var loading = i < 6 ? 'eager' : 'lazy';
-          return '<figure class="work-item" role="button" tabindex="0"><img src="' + src.replace(/"/g, '&quot;') + '" alt="' + alt.replace(/"/g, '&quot;') + '" loading="' + loading + '" decoding="async"></figure>';
-        }).join('');
-        galleryEl.querySelectorAll('.work-item').forEach(function (item) {
-          var img = item.querySelector('img');
-          if (img) {
-            function markLoaded() {
-              if (item.classList.contains('loaded')) return;
-              item.classList.add('loaded');
-            }
-            img.addEventListener('load', function () {
-              if (img.decode) {
-                img.decode().then(markLoaded).catch(markLoaded);
-              } else {
-                markLoaded();
-              }
-            });
-            if (img.complete && img.naturalWidth > 0) markLoaded();
-          }
-        });
-      }
-
       var lightbox = document.getElementById('lightbox');
       var lbImg = lightbox ? lightbox.querySelector('img') : null;
       var lbClose = lightbox ? lightbox.querySelector('.lightbox-close') : null;
-
       function openLightbox(src, alt) {
         if (!lightbox || !lbImg) return;
         lightbox.classList.remove('loaded');
@@ -1878,15 +1860,56 @@
         if (lbImg.complete) lightbox.classList.add('loaded');
       }
 
-      document.querySelectorAll('.work-item').forEach(function (item) {
-        item.addEventListener('click', function () {
-          var img = this.querySelector('img');
-          if (img && lightbox && lbImg) openLightbox(img.src, img.alt);
+      var galleryEl = document.getElementById('works-gallery');
+      if (galleryEl) {
+        galleryEl.innerHTML = WORK_IMAGES.map(function (src, i) {
+          var alt = 'Work ' + (i + 1);
+          return '<figure class="work-item" role="button" tabindex="0" data-index="' + i + '"><img data-src="' + src.replace(/"/g, '&quot;') + '" alt="' + alt.replace(/"/g, '&quot;') + '" decoding="async"></figure>';
+        }).join('');
+
+        var workItems = galleryEl.querySelectorAll('.work-item');
+        var nextIndex = 0;
+        function loadNextWorkImage() {
+          if (nextIndex >= workItems.length) return;
+          var item = workItems[nextIndex];
+          var img = item.querySelector('img');
+          var url = img && img.getAttribute('data-src');
+          if (!url) {
+            nextIndex++;
+            loadNextWorkImage();
+            return;
+          }
+          nextIndex++;
+          img.src = url;
+          function markLoaded() {
+            if (item.classList.contains('loaded')) return;
+            item.classList.add('loaded');
+            loadNextWorkImage();
+          }
+          img.addEventListener('load', function () {
+            if (img.decode) {
+              img.decode().then(markLoaded).catch(markLoaded);
+            } else {
+              markLoaded();
+            }
+          });
+          img.addEventListener('error', markLoaded);
+        }
+        loadNextWorkImage();
+
+        document.querySelectorAll('.work-item').forEach(function (item) {
+          item.addEventListener('click', function () {
+            var img = this.querySelector('img');
+            if (!img || !lightbox || !lbImg) return;
+            var src = img.src || img.getAttribute('data-src');
+            if (!src) return;
+            openLightbox(src, img.alt);
+          });
+          item.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
+          });
         });
-        item.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
-        });
-      });
+      }
       function closeLightbox() {
         if (!lightbox) return;
         lightbox.classList.remove('is-open');
@@ -2041,7 +2064,7 @@
             '<div class="article-item-mobile-img"><img src="' + mobileImg + '" alt="" loading="lazy"></div>' +
             '</div></a></div></li>';
         }).join('');
-        if (articleListWrap) articleListWrap.classList.add('article-list-view');
+        /* Art 列表不加 article-list-view，避免共用“固定高度+内部滚动”样式，只保留整页滚动 */
         articleListEl.querySelectorAll('.article-item-thumb, .article-item-mobile-img').forEach(function (wrap) {
           var img = wrap.querySelector('img');
           if (img) {
@@ -2082,12 +2105,11 @@
             '<span class="article-item-cta">查看Github</span>' +
             '</div></div></div></a></div></li>';
         }).join('');
-        if (aiListWrap) aiListWrap.classList.add('article-list-view');
+        if (aiListWrap) { /* 不再 add('article-list-view')，与 Art 一致 */ }
       }
 
       function showArticleList() {
-        document.body.classList.add('article-list-view');
-        document.documentElement.classList.add('article-list-view');
+        /* Art 页使用整页统一滚动，不锁 body/html，不添加 article-list-view */
         if (sections.article) {
           sections.article.classList.remove('article-view-detail');
           sections.article.classList.add('article-showing-list');
@@ -2097,7 +2119,11 @@
       }
 
       function showArticleDetail(id) {
-        articleListScrollBeforeDetail = articleListWrap ? articleListWrap.scrollTop : 0;
+        if (document.body.classList.contains('swipe-mode') && sections.article) {
+          articleListScrollBeforeDetail = sections.article.scrollTop;
+        } else {
+          articleListScrollBeforeDetail = window.scrollY || window.pageYOffset || 0;
+        }
         document.body.classList.remove('article-list-view');
         document.documentElement.classList.remove('article-list-view');
         var a = ARTICLE_LIST && ARTICLE_LIST.find(function (item) { return String(item.id) === String(id); });
@@ -2146,8 +2172,6 @@
         setNavActive('hero');
       }
       function showAiList() {
-        document.body.classList.add('ai-list-view');
-        document.documentElement.classList.add('ai-list-view');
         if (sections.ai) sections.ai.classList.add('ai-showing-list');
         renderAiList();
       }
@@ -2158,8 +2182,6 @@
           document.documentElement.classList.remove('article-list-view');
         }
         if (key !== 'ai') {
-          document.body.classList.remove('ai-list-view');
-          document.documentElement.classList.remove('ai-list-view');
           if (sections.ai) sections.ai.classList.remove('ai-showing-list');
         }
         document.body.setAttribute('data-tab', key);
@@ -2292,9 +2314,13 @@
           var isReturningFromDetail = sections.article && sections.article.classList.contains('article-view-detail');
           showOnly('article', isReturningFromDetail);
           showArticleList();
-          if (isReturningFromDetail && articleListWrap) {
+          if (isReturningFromDetail) {
             requestAnimationFrame(function () {
-              articleListWrap.scrollTop = articleListScrollBeforeDetail;
+              if (document.body.classList.contains('swipe-mode') && sections.article) {
+                sections.article.scrollTop = articleListScrollBeforeDetail;
+              } else {
+                window.scrollTo(0, articleListScrollBeforeDetail);
+              }
             });
           }
         }
@@ -2403,9 +2429,13 @@
           if (!swipeWrapperEl) return;
           if (isClickingTab) return;
           var w = swipeWrapperEl.getBoundingClientRect().width;
+          if (w <= 0) return;
           var scrollLeft = swipeWrapperEl.scrollLeft;
           var maxScroll = Math.max(0, swipeWrapperEl.scrollWidth - w);
-          var index = scrollLeft <= 1 ? 0 : (scrollLeft >= maxScroll - 1 ? SWIPE_PAGE_IDS.length - 1 : Math.floor((scrollLeft + w * 0.5) / w));
+          var index;
+          if (scrollLeft <= 1) index = 0;
+          else if (scrollLeft >= maxScroll - 1) index = SWIPE_PAGE_IDS.length - 1;
+          else index = Math.round(scrollLeft / w);
           index = Math.max(0, Math.min(index, SWIPE_PAGE_IDS.length - 1));
           var key = SWIPE_PAGE_IDS[index];
           if (index !== lastSwipePageIndex) {
@@ -2449,7 +2479,7 @@
         var scrollEndTimer = null;
         swipeScrollListener = function () {
           if (scrollEndTimer) clearTimeout(scrollEndTimer);
-          scrollEndTimer = setTimeout(updateTabFromScroll, 200);
+          scrollEndTimer = setTimeout(updateTabFromScroll, 280);
         };
         wrapper.addEventListener('scroll', swipeScrollListener, { passive: true });
         document.body.classList.add('swipe-mode');
@@ -2510,8 +2540,7 @@
         for (var i = 0; i < imgs.length; i++) {
           var img = imgs[i];
           if (!img) continue;
-          // 优先用浏览器已解析的地址（file:// 下 Chrome 能正确加载）
-          var url = (img.currentSrc || img.src || img.getAttribute('src') || '').trim();
+          var url = (img.currentSrc || img.src || img.getAttribute('data-src') || '').trim();
           if (url) srcs.push(url);
         }
         var u = Array.from(new Set(srcs));
@@ -2527,15 +2556,6 @@
         }
         return out;
       }
-
-      function preloadWorkImages() {
-        var pool = getWorkPoolFromGallery();
-        pool.forEach(function (src) {
-          var im = new Image();
-          im.src = src;
-        });
-      }
-      preloadWorkImages();
 
       function applyPeekImages() {
         if (!peekButtons.length) return;
